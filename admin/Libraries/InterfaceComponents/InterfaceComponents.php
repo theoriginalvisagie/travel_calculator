@@ -3,7 +3,7 @@
     require_once(LIB_DIR."/MySQL/MySQL.php");
 
     function createTable($sql, $table, $name, $dontShow, $actions, $view=true){
-        $total_records_per_page = 3;
+        $total_records_per_page = 10;
         if(isset($_SESSION[$table]['page_no']) && $_SESSION[$table]['page_no']!=""){
             $page_no = $_SESSION[$table]['page_no'];
         }else{
@@ -210,15 +210,6 @@
             echo "<li class='page-item'><a class='page-link' href='javascript:getnextTablePage(\"$total_no_of_pages\",\"$table\")' $style>Last &rsaquo;&rsaquo;</a></li>";
         } 
         echo"</ul></nav>";
-
-        echo "<div style='padding: 10px 20px 0px; border-top: dotted 1px #CCC;'>
-                <strong>Page $page_no of $total_no_of_pages</strong>
-             </div>";
-
-            //  $style="style='background-color:#00D1FF; color:black;'";
-
-            //  <a class='page-link' href='#' aria-label='Previous' $style>
-
     }
 
     function getModalContent($id,$table,$dontShow=""){
