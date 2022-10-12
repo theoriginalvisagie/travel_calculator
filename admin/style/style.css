@@ -1,0 +1,141 @@
+*{
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+body{
+  background-color: #e3e3e3;
+}
+
+.themeContainer {
+  display: grid;
+  height: 100vh;
+  grid-template-columns: repeat(16, 1fr);
+  grid-template-rows: repeat(15, 1fr);
+}
+
+.box{
+  background-color: #e3e3e3;
+  /* color: #FFF; */
+  /* border: 1px solid black; */
+}
+
+.mainToolbar{
+  background-color: #FFF;
+  grid-column-start: 3;
+  grid-column-end: 17;
+  /* grid-column : span 15; */
+  grid-row : span 1;
+}
+
+.topToolBar{
+  background-color: #002855;
+  grid-column-start: 3;
+  grid-column-end: 17;
+  /* grid-column : span 15; */
+}
+
+.sideNav{
+  background-color: #2D2D2D;
+  grid-row-start: 1;
+  grid-row-end: 16;
+  /* grid-row : span 15; */
+  grid-column : span 2;
+}
+
+.mainContent{
+  grid-row : span 14;
+  grid-column : span 14;
+}
+
+.loginBody{
+  background-color: #2D2D2D;
+}
+
+.whiteText{
+  color: #FFF;
+}
+
+.menuItem{
+  color:#fff !important; 
+  padding-left:5px; 
+  padding-top:0px; 
+  padding-right:0px; 
+  padding-bottom:0px;
+}
+
+
+.stdBtnOutBlack{
+  background: #2D2D2D !important;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), -2px -2px 10px rgba(255, 255, 255, 0.25);
+  border-radius: 50px;
+  border: 0px;
+  width: 200px;
+  height: 45px;
+}
+
+.roundCorners{
+  border-radius: 50px !important;
+}
+
+.userInfo{
+  margin-right: 10px; 
+  margin-left:10px; 
+  font-size:20px; 
+  color:#2D2D2D;
+  cursor: pointer;
+}
+
+.userInfo:hover{
+  color: #00D1FF;
+}
+
+.linkColor{
+  font-size:20px; 
+  color:#2D2D2D;
+  cursor: pointer;
+}
+
+.linkColor:hover{
+  color: #00D1FF;
+}
+
+.dropdown-menu > li > a:hover{
+  background-color:#00D1FF;
+  color: #FFF;
+}
+
+#logOutUser:hover{
+  background-color:#00D1FF;
+  color: #FFF;
+}
+
+#leftSide{
+  height: 100%;
+  margin:0px; height:100vh; padding:0px;
+}
+
+#rightSide{
+  margin:0px; height:100vh; padding:0px;
+  background-color: #00D1FF;
+  height: 100%;
+}
+
+#loginFormDiv{
+  width: 45%;
+  height: 50%;
+  margin: auto;
+  align-items: center;
+  margin-top: 25%;
+  vertical-align: middle;
+}
+
+#RegisterFormDiv{
+  width: 45%;
+  height: 50%;
+  margin: auto;
+  align-items: center;
+  margin-top: 15%;
+  vertical-align: middle;
+}

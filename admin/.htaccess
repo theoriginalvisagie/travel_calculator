@@ -1,0 +1,10 @@
+RewriteEngine On
+RewriteBase /Travel_Calculator/
+Options +FollowSymLinks
+php_value include_path ".:C:/xampp/htdocs/Travel_Calculator/"
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule !.(js|gif|jpg|png|css|eot|svg|ttf|woff|woff2|map|graph)$ admin/controller.php
+		

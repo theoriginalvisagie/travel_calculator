@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteBase /Travel_Calculator/
+Options +FollowSymLinks
+php_value include_path ".:C:/xampp/htdocs/Travel_Calculator/"

@@ -1,0 +1,178 @@
+/*Default Fonts*/
+@font-face {
+    font-family: "Barlow";
+    src: url("../Fonts/Barlow/Barlow-Medium.ttf");
+    font-weight: 300;
+}
+@font-face {
+    font-family: "Oswald";
+    src: url("../Fonts/Oswald/static/Oswald-Regular.ttf");
+    font-weight: normal;
+}
+@font-face {
+    font-family: "Condiment";
+    src: url("../Fonts/Condiment/Condiment-Regular.ttf");
+    font-weight: normal;
+}
+
+#logoFont{
+    font-family: "Condiment";
+    margin-top: 0.8rem;
+    margin-left: 2rem;
+    font-size: 48px;
+    color: #00D1FF !important;
+    text-decoration: none;
+}
+
+h1,h2,h3,h4,h5,h6{
+    font-family: "Barlow";
+}
+
+body,p{
+    font-family: "Oswald";
+}
+/*=====[END]=====*/
+
+.floatRight{
+    float: right;
+}
+/* Default button style */
+.button{
+    border-radius: 50px;
+    border: none;
+    width: 80px;
+    height: 32px;
+    text-align: center;
+    color: #2D2D2D;
+    cursor: pointer;
+}
+/* =====[END]===== */
+
+/* Colours */
+.def{
+    background-color: #E1E1E1 !important;   
+}
+
+.blu{
+    background-color: #00D1FF !important;
+    color: #2D2D2D;
+}
+
+.inf{
+    background-color: #0466C8 !important;
+}
+
+.no{
+    background-color: #F52323 !important;
+}
+
+.maybe{
+    background-color: #FB8500 !important;
+}
+
+.go{
+    background-color: #06D6A0 !important;
+}
+
+.darkBg{
+    background-color: #2D2D2D !important;
+}
+
+.lightBg{
+    background-color: #FFF !important;
+}
+
+.defBg{
+    background-color: #E1E1E1 !important;
+}
+/* =====[END]===== */
+
+/* outline button */
+.button-outline{
+    border: 1px solid #fff;
+    background-color: transparent;
+    color: #fff;
+}
+
+.def-outline{
+    border: 1px solid #E1E1E1;
+    background-color: transparent;
+    color: #E1E1E1;
+}
+
+.blu-outline{
+    border: 1px solid #00D1FF;
+    background-color: transparent;
+    color: #00D1FF;
+}
+
+.inf-outline{
+    border: 1px solid #0466C8;
+    background-color: transparent;
+    color: #0466C8;
+}
+
+.no-outline{
+    border: 1px solid #F52323;
+    background-color: transparent;
+    color: #F52323;
+}
+
+.maybe-outline{
+    border: 1px solid #FB8500;
+    background-color: transparent;
+    color: #FB8500;
+}
+
+.go-outline{
+    border: 1px solid #06D6A0;
+    background-color: transparent;
+    color: #06D6A0;
+}
+/* =====[END]===== */
+
+/* Box Shadown */
+/* Outside Shadow */
+.drop{
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.25), -2px -2px 5px rgba(255, 255, 255, 0.25);
+}
+
+/* Inside Shadow */
+.inner{
+    box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.25), inset -2px -2px 5px rgba(255, 255, 255, 0.25);
+}
+/* =====[END]===== */
+
+/*Text Box*/
+
+.textBox{
+    padding-left: 10px;
+    width: 250px;
+    height: 38px;
+    max-width: 100%;
+    max-height: 38px;
+    border-radius: 50px;
+    border: none;
+}
+
+.corners{
+    border-radius: 10px !important;
+    border: 1px solid #E1E1E1;
+}
+
+.chkBox{
+    cursor: pointer;
+    border-radius: 10px;
+    width: 0.9rem;
+    height: 0.9rem;
+}
+
+.modal-dialog {
+    width: 500px !important;/*auto !important;*/
+    height: auto;
+    /* transition: opacity 1s linear; */
+}
+
+.tableArrows{
+    cursor: pointer;
+}
