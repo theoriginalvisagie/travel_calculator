@@ -19,33 +19,43 @@
             createTable($sql, $table, $name, $dontShow, $actions, $view=true);
         }
 
-        function getAddNewEntry($table){
+        function getAddEditEntry($id,$table,$dontShow=""){
             $dontShow = "id,userID";
             $headings = getTableColumns($table, $dontShow);
+            $sql = "SELECT * FROM $table WHERE id='$id'";
+            $results = exeSQL($sql);
 
-            echo "<form id='newEntryForm'>";
-            echo "<table class='table table-striped'>";    
-
+            echo "<form id='editEntryForm'>";
+            echo "<table class='table table-striped'>";
+                
             foreach($headings as $heading){
                 $column = $heading['Column'];
                 $type = $heading['Type'];
-
+                
                 echo "<tr>";
                 echo "<td>".ucwords(str_replace("_"," ",$column))."</td>";
+
+                
+                $value = $results[0][$column];
+                
                 echo "<td>";
-                if($heading['Type'] == "bit(1)"){
+
+                if($type == "bit(1)"){
+                    if($value == 1){
+                        $yesSelect = "selected";
+                    }else if($value == 0){
+                        $noSelect = "selected";
+                    }
                     echo "<select name='$column' id='$column' class='textBox corners'>
                             <option value=''></option>
-                            <option value='1'>Yes</option>
-                            <option value='0'>No</option>
+                            <option value='1' $yesSelect >Yes</option>
+                            <option value='0' $noSelect >No</option>
                         </select>";
-                }else if($heading['Column'] == "department"){
-                    // echo dropDown();
                 }else{
-                    echo "<input type='text' class='textBox corners' id='$column' name='$column'>";
+                    echo "<input type='text' name='$column' id='$column' class='textBox corners' value='$value'>";
                 }
-                
-                echo "</td>";
+
+                echo"</td>";
                 echo "</tr>";
             }
 
