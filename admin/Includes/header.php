@@ -72,6 +72,7 @@
             </div>
            
             <?php
+                require_once(INC_DIR."/collapseMenu.php");
                 require_once(LIB_DIR."/MySQL/MySQL.php");
 
                 $sql = "SELECT * FROM modules WHERE is_active=1";
@@ -80,11 +81,19 @@
                 echo "<ul class='nav flex-column'>";
                 foreach($results as $result=>$row){
                     echo "<li class='nav-item'>
-                             <a class='nav-link menuItem' href='".$url."{$row['object']}/View' style='align-self: flex-end;'>
+                             <a class='nav-link menuItem' href='".$url."{$row['object']}/View' style='align-self: flex-end; display:inline;'>
                                 <i class='{$row['icon']}' style='width:22px; height:22px;'></i>
                                 {$row['name']}
                              </a>
-                         </li>";
+                             <span class='userInfoLight' style='float:right; display:inline; margin-right:15px;'>
+                                <a data-bs-toggle='collapse' data-bs-target='#multiCollapse_{$row['object']}' aria-expanded='false' aria-controls='multiCollapse_{$row['id']}'>
+                                    <i class='fa-solid fa-arrows-up-down'></i>
+                                </a>
+                            </span>";
+                            makeSubMenu($row['object']);
+
+                         echo"</li>
+                         <hr style='color:#FFF;'>";
                 }
                 echo "</ul>";
             ?>
