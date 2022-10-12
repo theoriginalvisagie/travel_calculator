@@ -20,7 +20,7 @@
     }
 
     function uploadImg(){
-        $target_dir = ADMIN_DIR."/SYSTEMREC/User_Profile_Images/";
+        $target_dir = ADMIN_DIR."/SYSTEMREC/{$_POST['dir']}/";
         foreach($_FILES as $key){
             if($key['type'] == "image/jpeg" || $key['type'] == "image/png"){
                 $target_file = $target_dir.basename($key["name"]);
@@ -34,9 +34,10 @@
     }
 
     function fileExists($file){
-        $dir = URLROOT."/admin/".$file;
-        if(file_exists($dir)){
-            $dir = $dir;
+        $dir = APPROOT."/admin/".$file;
+
+        if(file_exists($file)){
+            $dir = $file;
         }else{
             $dir = false;
         }
