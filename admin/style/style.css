@@ -91,6 +91,15 @@ body{
   color: #00D1FF;
 }
 
+.userInfoLight{
+  color:#FFF;
+  cursor: pointer;
+}
+
+.userInfoLight:hover{
+  color: #00D1FF;
+}
+
 .linkColor{
   font-size:20px; 
   color:#2D2D2D;
