@@ -6,7 +6,7 @@
     require_once("includes.php");
 ?>
 
-    <div class="box mainContent" id='mainContentInner'> 
+    <div class="box mainContent" id='mainContentInner' style='overflow: auto;'> 
         <script>
             var rootDirectory = "<?php echo str_replace('\\', '/',URLROOT);?>";
         </script>
