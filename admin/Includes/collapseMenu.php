@@ -13,7 +13,7 @@
         }else{
             echo "<div class='collapse multi-collapse' id='multiCollapse_$name'>
                 <div>
-                    NOPE
+                    
                 </div>
             </div>";
         }
