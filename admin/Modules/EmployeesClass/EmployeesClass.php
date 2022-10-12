@@ -13,6 +13,12 @@
             cardStart("Employees$name","#FFF",true,"2");
             if(isset($_GET['employee'])){
                 $this->showEmployeeDetails($_GET['employee']);
+            }else if(isset($_GET['subMenu'])){
+                if($_GET['subMenu'] == "departments"){
+                    $this->getDepartments();
+                }else if($_GET['subMenu'] == "transport_types"){
+                    $this->getTransportTypes();
+                }
             }else{
                 $this->displayEmployees();
             }
@@ -150,7 +156,7 @@
 
                 $active = "";
             }
-            
+
             echo "</ul>";
         }
 
@@ -171,6 +177,24 @@
                 $sql = "UPDATE employees SET profile_pic = '$image' WHERE id='$id'";
             }
             exeSQL($sql);
+        }
+
+        function getTransportTypes(){
+            $sql = "SELECT * FROM transport_types";
+            $table = "transport_types";
+            $name = "transport_types_table";
+            $dontShow = "id";
+            $actions = $this->getTableActions($table,false);
+            createTable($sql, $table, $name, $dontShow, $actions, $view=true);
+        }
+
+        function getDepartments(){
+            $sql = "SELECT * FROM departments";
+            $table = "departments";
+            $name = "departments_table";
+            $dontShow = "id";
+            $actions = $this->getTableActions($table,false);
+            createTable($sql, $table, $name, $dontShow, $actions, $view=true);
         }
     }
 ?>
