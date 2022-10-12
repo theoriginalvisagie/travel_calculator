@@ -1,5 +1,3 @@
-// var rootDirectory = "localhost/Immortal/admin";
-
 function checkUsernameAvailabiltiy(username){
     $.ajax({  
         type: 'POST',  
@@ -221,14 +219,14 @@ function resetUserPassword(){
                             confirmButtonText: 'Return to login.'
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                window.location.href = "http://localhost/Immortal/login.php";
+                                window.location.href = "http://localhost/Travel_Calculator/login.php";
                             }
                         });
                     }
                 }
             });
         }else{
-            window.location.href="http://localhost/Immortal/login.php";
+            window.location.href="http://localhost/Travel_Calculator/login.php";
         }
       })
 

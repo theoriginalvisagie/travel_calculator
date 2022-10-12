@@ -2,7 +2,7 @@ function openModal(id,table,action){
     if(action == "Add"){
         $.ajax({  
             type: 'POST',  
-            url: '/Immortal/admin/Ajax/ajax.php', 
+            url: '/Travel_Calculator/admin/Ajax/ajax.php', 
             data: {action:'addNewEntry', table:table},
             dateType: "html",
             success: function(html) {
@@ -17,7 +17,7 @@ function openModal(id,table,action){
     }else if(action == "Edit"){
         $.ajax({  
             type: 'POST',  
-            url: '/Immortal/admin/Ajax/ajax.php', 
+            url: '/Travel_Calculator/admin/Ajax/ajax.php', 
             data: {action:'getModalContentEdit', table:table, id:id},
             dateType: "html",
             success: function(html) {
@@ -49,7 +49,7 @@ function removeEntry(id,table,action){
         if (result.isConfirmed) {
             $.ajax({  
                 type: 'POST',  
-                url: '/Immortal/admin/Ajax/ajax.php', 
+                url: '/Travel_Calculator/admin/Ajax/ajax.php', 
                 data: {action:'removeEntry', table:table, id:id},
                 success: function(response) {
                     if(response == "true"){
@@ -79,7 +79,7 @@ function saveEntry(table, action = ""){
         var formData = $('#editEntryForm').serialize();
         $.ajax({  
             type: 'POST',  
-            url: '/Immortal/admin/Ajax/ajax.php', 
+            url: '/Travel_Calculator/admin/Ajax/ajax.php', 
             data: {action:'updateEntry', table:table, formData:formData},
             success: function(response) {
                 if(response == "true"){
@@ -103,7 +103,7 @@ function saveEntry(table, action = ""){
         var formData = $('#newEntryForm').serialize();
         $.ajax({  
             type: 'POST',  
-            url: '/Immortal/admin/Ajax/ajax.php', 
+            url: '/Travel_Calculator/admin/Ajax/ajax.php', 
             data: {action:'saveNewEntry', table:table, formData:formData},
             success: function(response) {
                 console.log(response);

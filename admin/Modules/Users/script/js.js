@@ -3,7 +3,7 @@ function updateUserDetails(value){
 
     $.ajax({  
         type: 'POST',  
-        url: '/Immortal/admin/Modules/Users/ajax/getUsersAjax.php', 
+        url: '/Travel_Calculator/admin/Modules/Users/ajax/getUsersAjax.php', 
         data: {action:'updateUserDetails', formData:formData,value:value},
         success: function(response) {
             if(response == "success"){
