@@ -104,9 +104,10 @@
      * Fetches specified columns from table
      * @param string $table Table it needs to get columns from.
      * @param string [optional] $hidden columns to not return.
+     * @param bool [optional] $show show columns in $hidden variable if set to true
      * @return array of column names and types.
      */
-    function getTableColumns($table,$hidden=""){
+    function getTableColumns($table,$hidden="",$show=false){
         if($hidden != ""){
             $hidden = explode(",",$hidden);
 
@@ -117,6 +118,10 @@
             $restrict = trim(implode($restrict),",");
 
             $where = "WHERE FIELD NOT IN ($restrict)";
+            if($show){
+                $where = "WHERE FIELD IN ($restrict)";
+            }
+            
         }
 
         $sql = "SHOW COLUMNS FROM $table $where";
