@@ -15,8 +15,8 @@
             $table = "employees";
             $name = "employees_table";
             $dontShow = "id,userID";
-            $actions = "";
-            createTable($sql, $table, $name, $dontShow, $actions,$view=true);
+            $actions = $this->getTableActions($table,true);
+            createTable($sql, $table, $name, $dontShow, $actions, $view=true);
         }
 
         function getAddNewEntry($table){
@@ -51,6 +51,20 @@
 
             echo "</table>";
             echo "</form>";
+        }
+
+        function getTableActions($table,$view,$id=""){
+            $s = "<td>";
+    
+            if($view){
+                $s .= "<button id='view' name='view' class='button blu drop' onclick='openModal($id,\"$table\",\"View\")'>View</button>&nbsp";
+            }
+               
+            $s .= "<button id='edit' name='edit' class='button def drop' onclick='openModal($id,\"$table\",\"Edit\")'>Edit</button>
+                   <button id='remove' name='remove' class='button no-outline' onclick='removeEntry($id,\"$table\",\"Remove\")'>Remove</button>
+                   </td>";
+
+            return $s;
         }
     }
 ?>

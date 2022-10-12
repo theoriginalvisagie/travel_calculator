@@ -2,7 +2,7 @@
     include_once("../config.php");
     require_once(LIB_DIR."/MySQL/MySQL.php");
 
-    function createTable($sql, $table, $name, $dontShow, $actions,$view=true){
+    function createTable($sql, $table, $name, $dontShow, $actions, $view=true){
         $total_records_per_page = 3;
         if(isset($_SESSION[$table]['page_no']) && $_SESSION[$table]['page_no']!=""){
             $page_no = $_SESSION[$table]['page_no'];
@@ -12,7 +12,8 @@
         $offset = ($page_no-1) * $total_records_per_page;
 
         $headings = getTableColumns($table, $dontShow);
-        echo "<div id='$table' class='m-3'>";//style='border: 1px solid black;'
+
+        echo "<div id='$table' class='m-3'>";
 
         echo "<div class='card'>
                 <div class='card-header'>
@@ -69,14 +70,13 @@
             if($actions == ""){
                 echo getTableActions($result['id'],$table,$view);
             }else{
-                echo $actions;
+                echo getObjectActions($table,$view,$result['id']);
             }
             echo "</tr>";
             echo "</tbody>";
         }
 
         echo "</table>";
-        
         getTablePagnation($table,$total_records_per_page,$offset,$page_no);
         echo "</div></div>";//Card Divs
         echo "</div>";
@@ -98,6 +98,21 @@
                     </div>
                 </div>
             </div>";
+    }
+
+    function getObjectActions($table,$view,$id){
+        
+        $url = str_replace(URLROOT,"",$_SERVER['REQUEST_URI']);
+        if(strpos($url,"/admin/Modules") !== false){
+            $url = explode("/",$url);
+            if(isset($url[3])){
+                $module = $url[4];
+            }
+
+            if(method_exists($module,"getTableActions")){
+                $object = new $module;
+                echo $object->getTableActions($table,$view,$id);
+            }
     }
 
     function getTableActions($id,$table,$view=true){
