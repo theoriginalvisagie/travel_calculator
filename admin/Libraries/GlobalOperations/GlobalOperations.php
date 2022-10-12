@@ -32,4 +32,15 @@
             }
         }
     }
+
+    function fileExists($file){
+        $dir = URLROOT."/admin/".$file;
+        if(file_exists($dir)){
+            $dir = $dir;
+        }else{
+            $dir = false;
+        }
+
+        return $dir;
+    }
 ?>
