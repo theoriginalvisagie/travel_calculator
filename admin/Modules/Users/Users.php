@@ -19,7 +19,6 @@
                     WHERE userID = '$userID'";
 
             $result = exeSQL($sql);
-            // echo '<pre>'.print_r($result,true).'</pre>';
                 
             return $result;
         }
@@ -30,7 +29,7 @@
 
             if(!empty($profilePic)){
                 $userImg = URLROOT."/admin/".$profilePic;
-                if(fileExists($userImg)){
+                if(fileExists($profilePic)){
                     $userImg = URLROOT."/admin/".$profilePic;
                 }else{
                     $userImg = URLROOT."/admin/SYSTEMREC/Default_images/profile_defualt.jpg";
@@ -52,6 +51,7 @@
                         <img class='profile-pic' src='$userImg'>
                     </div>
                     <input type='hidden' name='db' id='db' value='users_settings'>
+                    <input type='hidden' name='dir' id='dir' value='User_Profile_Images'>
                     <input type='file' name='profilePic' id='profilePic' value=''><br>
                     <input type='submit' name='uploadPic' id='uploadPic' class='button blu-outline' value='Upload' style='margin-top:5px;'>
                     </form>";
