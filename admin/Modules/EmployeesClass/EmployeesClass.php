@@ -5,7 +5,12 @@
         }
 
         function init(){
-            cardStart("Employees","#FFF",true,"2");
+            $name = "";
+            if(isset($_GET['employee'])){
+                $name = " : ".getColumnValues("employees","first_name,last_name","id='{$_GET['employee']}'",true);
+                $name = str_replace(","," ",$name);
+            }
+            cardStart("Employees$name","#FFF",true,"2");
             if(isset($_GET['employee'])){
                 $this->showEmployeeDetails($_GET['employee']);
             }else{
@@ -99,8 +104,6 @@
                 $empImg = URLROOT."/admin/SYSTEMREC/Default_images/profile_defualt.jpg";
             }
 
-            echo "<h2>{$empData[0]['first_name']} {$empData[0]['last_name']}</h2>";
-
             echo "<div class='row'>";
 
             echo "<div class='col-3'>
@@ -117,9 +120,38 @@
             echo "</div>";
 
             echo "<div class='col-9'>";
+            $this->getTabs($id);
             echo "</div>";
 
             echo "</div>";
+        }
+
+        function getTabs($id){
+            $active = "";
+            $link = "?employee=$id";
+            $tabs = array(
+                            "Personal Information"=>"personal_info",
+                            "Tranport Information"=>"transport_info",
+                            "Account Access"=>"account_info"
+                        );
+            if(!isset($_GET['subTab'])){
+                $_GET['subTab'] = "personal_info";
+            }
+            
+            echo "<ul class='nav nav-tabs'>";
+            foreach($tabs as $tab=>$var){
+                if($_GET['subTab'] == $var){
+                    $active = "active";
+                }
+
+                echo "<li class='nav-item'>
+                        <a class='nav-link $active' href='$link&subTab=$var'>$tab</a>
+                     </li>";
+
+                $active = "";
+            }
+            
+            echo "</ul>";
         }
 
         function getEmployeeDetails($id){
