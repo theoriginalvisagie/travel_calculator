@@ -31,6 +31,8 @@ h1,h2,h3,h4,h5,h6{
 body,p{
     font-family: "Oswald";
 }
+
+
 /*=====[END]=====*/
 
 .floatRight{
@@ -65,26 +67,44 @@ body,p{
 .def{
     background-color: #E1E1E1 !important;   
 }
+.def-text{
+    color: #00D1FF !important;
+}
 
 .blu{
     background-color: #00D1FF !important;
     color: #2D2D2D;
 }
+.blu-text{
+    color: #00D1FF !important;
+}
 
 .inf{
     background-color: #0466C8 !important;
+}
+.inf-text{
+    color: #00D1FF !important;
 }
 
 .no{
     background-color: #F52323 !important;
 }
+.no-text{
+    color: #00D1FF !important;
+}
 
 .maybe{
     background-color: #FB8500 !important;
 }
+.maybe-text{
+    color: #00D1FF !important;
+}
 
 .go{
     background-color: #06D6A0 !important;
+}
+.go-text{
+    color: #00D1FF !important;
 }
 
 .darkBg{
