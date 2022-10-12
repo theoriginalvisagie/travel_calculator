@@ -127,23 +127,6 @@ function closeModal(table){
     $("#exampleModal").modal('hide');
 }
 
-function getOppositeIcon(iconID,name){
-    $("#"+iconID+"_"+name+"_icon").toggleClass("fa-circle-arrow-down fa-circle-arrow-up");
-
-    // $.ajax({  
-    //     type: 'POST',  
-    //     url: '/Immortal/admin/Ajax/ajax.php', 
-    //     data: {action:'sortTable', table:table, formData:formData},
-    //     dateType: "html",
-    //     success: function(html) {
-    //         console.log(response);
-    //         if(response == "true"){
-               
-    //         }
-    //     }
-    // });
-}
-
 function getnextTablePage(pageNo,table){
     $.ajax({  
         type: 'POST',  

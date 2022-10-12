@@ -31,7 +31,6 @@
                 $heading = ucwords(str_replace("_"," ",$data['Column']));
                 echo "<th>
                         $heading
-                        <i class='fa-solid fa-circle-arrow-down tableArrows tableFilterIcons_$name' id='{$data['Column']}_$name"."_icon' name='{$data['Column']}_$name"."_icon' style='color:#00D1FF;' onclick='getOppositeIcon(\"{$data['Column']}\",\"$name\")'></i>
                       </th>";
             }
             echo "<th>Actions</th>";
