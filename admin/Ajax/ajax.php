@@ -38,7 +38,7 @@
         }else{
             echo "Deletion Error!";
         }
-    }else if($_POST['action']=="addNewEntry"){
+    }else if($_POST['action']=="Add"){
         $url = str_replace(URLROOT,"",$_SERVER['HTTP_REFERER']);
         if(strpos($url,"/admin/Modules") !== false){
             $url = explode("/",$url);
@@ -48,14 +48,14 @@
 
             include(MOD_DIR."/".$module."/$module.php");
 
-            if(method_exists($module,"getAddNewEntry")){
+            if(method_exists($module,"getAddEditEntry")){
                 $object = new $module;
-                echo $object->getAddNewEntry($_POST['table']);
+                echo $object->getAddEditEntry("",$_POST['table']);
             }else{
-                echo getAddNewEntry($_POST['table']);
+                echo getAddEditEntry("",$_POST['table']);
             }
         }else{
-            echo getAddNewEntry($_POST['table']);
+            echo getAddEditEntry("",$_POST['table']);
         }
     }else if($_POST['action']=="saveNewEntry"){
         $formData = explode("&",$_POST['formData']);
@@ -78,7 +78,7 @@
         $values .= ")";
 
         $sql .= $columns . $values;
-
+        // echo $sql;
         $result = exeSQL($sql);
         if($result){
             echo "true";
@@ -86,7 +86,7 @@
             echo "false";
         }
 
-    }else if($_POST['action']=="getModalContentEdit"){
+    }else if($_POST['action']=="Edit"){
         $url = str_replace(URLROOT,"",$_SERVER['HTTP_REFERER']);
         if(strpos($url,"/admin/Modules") !== false){
             $url = explode("/",$url);
@@ -96,14 +96,14 @@
 
             include(MOD_DIR."/".$module."/$module.php");
 
-            if(method_exists($module,"getModalContentEdit")){
+            if(method_exists($module,"getAddEditEntry")){
                 $object = new $module;
-                echo $object->getModalContentEdit($_POST['id'],$_POST['table']);
+                echo $object->getAddEditEntry($_POST['id'],$_POST['table']);
             }else{
-                echo getModalContentEdit($_POST['id'],$_POST['table']);
+                echo getAddEditEntry($_POST['id'],$_POST['table']);
             }
         }else{
-            echo getModalContentEdit($_POST['id'],$_POST['table']);
+            echo getAddEditEntry($_POST['id'],$_POST['table']);
         }
         
     }else if($_POST['action']=="updateEntry"){
@@ -127,8 +127,8 @@
 
         $sql = rtrim($sql,",");
 
-        $sql .= " WHERE id='$id' ";
-        // echo $sql;
+        $sql .= " WHERE id='{$_POST['id']}' ";
+        
         $result = exeSQL($sql);
         if($result){
             echo "true";

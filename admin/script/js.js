@@ -1,38 +1,22 @@
 function openModal(id,table,action){
-    if(action == "Add"){
-        $.ajax({  
-            type: 'POST',  
-            url: '/Travel_Calculator/admin/Ajax/ajax.php', 
-            data: {action:'addNewEntry', table:table},
-            dateType: "html",
-            success: function(html) {
-                if(html != ""){
+    $.ajax({  
+        type: 'POST',  
+        url: '/Travel_Calculator/admin/Ajax/ajax.php', 
+        data: {action:action, table:table, id:id},
+        dateType: "html",
+        success: function(html) {
+            if(html != ""){
+                if(action == "Edit"){
+                    document.getElementById("actionButton").innerHTML = "<button class='button go' onclick='saveEntry(\""+table+"\",\""+id+"\",\""+action+"\")'>Update</button>";
+                }else{
                     document.getElementById("actionButton").innerHTML = "<button class='button go' onclick='saveEntry(\""+table+"\")'>Save</button>";
-                    document.getElementById("modalBody").innerHTML = html;
-                    document.getElementById("modalHeader").innerHTML = action + " Entry";
-                    $("#exampleModal").modal('show');
                 }
+                document.getElementById("modalBody").innerHTML = html;
+                document.getElementById("modalHeader").innerHTML = action + " Entry";
+                $("#exampleModal").modal('show');
             }
-        }); 
-    }else if(action == "Edit"){
-        $.ajax({  
-            type: 'POST',  
-            url: '/Travel_Calculator/admin/Ajax/ajax.php', 
-            data: {action:'getModalContentEdit', table:table, id:id},
-            dateType: "html",
-            success: function(html) {
-                if(html != ""){
-                    if(action == "Edit"){
-                        document.getElementById("actionButton").innerHTML = "<button class='button go' onclick='saveEntry(\""+table+"\",\""+action+"\")'>Update</button>";
-                    }
-                    document.getElementById("modalBody").innerHTML = html;
-                    document.getElementById("modalHeader").innerHTML = action + " Entry";
-                    $("#exampleModal").modal('show');
-                }
-            }
-        }); 
-    }
-    
+        }
+    }); 
 }
 
 function removeEntry(id,table,action){
@@ -74,17 +58,17 @@ function removeEntry(id,table,action){
 
 }
 
-function saveEntry(table, action = ""){
+function saveEntry(table,id,action=""){
     if(action == "Edit"){
         var formData = $('#editEntryForm').serialize();
         $.ajax({  
             type: 'POST',  
             url: '/Travel_Calculator/admin/Ajax/ajax.php', 
-            data: {action:'updateEntry', table:table, formData:formData},
+            data: {action:'updateEntry', table:table, formData:formData, id:id},
             success: function(response) {
                 if(response == "true"){
                     Swal.fire({
-                        title: 'Saved!',
+                        title: 'Updated!',
                         text: 'Your entry was successfully updated',
                         icon: 'success',
                         confirmButtonColor: '#00D1FF',
@@ -100,13 +84,14 @@ function saveEntry(table, action = ""){
             }
         });
     }else{
-        var formData = $('#newEntryForm').serialize();
+        var formData = $('#editEntryForm').serialize();
         $.ajax({  
             type: 'POST',  
             url: '/Travel_Calculator/admin/Ajax/ajax.php', 
             data: {action:'saveNewEntry', table:table, formData:formData},
             success: function(response) {
                 console.log(response);
+                
                 if(response == "true"){
                     Swal.fire({
                         title: 'Saved!',

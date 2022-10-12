@@ -113,13 +113,14 @@
                 $object = new $module;
                 echo $object->getTableActions($table,$view,$id);
             }
+        }
     }
 
     function getTableActions($id,$table,$view=true){
         echo "<td>";
 
         if($view){
-            echo"<button id='edit' name='edit' class='button blu drop' onclick='openModal($id,\"$table\",\"View\")'>View</button>&nbsp";
+            echo"<button id='view' name='view' class='button blu drop' onclick='openModal($id,\"$table\",\"View\")'>View</button>&nbsp";
         }
            
         echo"<button id='edit' name='edit' class='button def drop' onclick='openModal($id,\"$table\",\"Edit\")'>Edit</button>
@@ -237,72 +238,43 @@
         echo "</table>";
     }
 
-    function getAddNewEntry($table,$dontShow=""){
-        $headings = getTableColumns($table, $dontShow);
-
-        echo "<form id='newEntryForm'>";
-        echo "<table class='table table-striped'>";    
-
-        foreach($headings as $heading){
-            $column = $heading['Column'];
-            $type = $heading['Type'];
-
-            echo "<tr>";
-            echo "<td>".ucwords(str_replace("_"," ",$column))."</td>";
-            echo "<td>";
-            if($heading['Type'] == "bit(1)"){
-                echo "<select name='$column' id='$column' class='textBox corners'>
-                        <option value=''></option>
-                        <option value='1'>Yes</option>
-                        <option value='0'>No</option>
-                    </select>";
-            }else{
-                echo "<input type='text' class='textBox corners' id='$column' name='$column'>";
-            }
-            
-            echo "</td>";
-            echo "</tr>";
-        }
-
-        echo "</table>";
-        echo "</form>";
-    }
-
-    function getModalContentEdit($id,$table,$dontShow=""){
+    function getAddEditEntry($id,$table,$dontShow=""){
+        $dontShow = "id,userID";
         $headings = getTableColumns($table, $dontShow);
         $sql = "SELECT * FROM $table WHERE id='$id'";
         $results = exeSQL($sql);
 
         echo "<form id='editEntryForm'>";
-        echo "<table class='table table-striped'>";           
+        echo "<table class='table table-striped'>";
+            
         foreach($headings as $heading){
             $column = $heading['Column'];
             $type = $heading['Type'];
             
             echo "<tr>";
-            foreach($results as $data=>$result){
-                $value = $result[$column];
+            echo "<td>".ucwords(str_replace("_"," ",$column))."</td>";
 
-                echo "<td>".ucwords(str_replace("_"," ",$column))."</td>";
-                echo "<td>";
+            
+            $value = $results[0][$column];
+            
+            echo "<td>";
 
-                if($type == "bit(1)"){
-                    if($value == 1){
-                        $yesSelect = "selected";
-                    }else if($value == 0){
-                        $noSelect = "selected";
-                    }
-                    echo "<select name='$column' id='$column' class='textBox corners'>
-                            <option value=''></option>
-                            <option value='1' $yesSelect >Yes</option>
-                            <option value='0' $noSelect >No</option>
-                          </select>";
-                }else{
-                    echo "<input type='text' name='$column' id='$column' class='textBox corners' value='$value'>";
+            if($type == "bit(1)"){
+                if($value == 1){
+                    $yesSelect = "selected";
+                }else if($value == 0){
+                    $noSelect = "selected";
                 }
-
-                echo"</td>";
+                echo "<select name='$column' id='$column' class='textBox corners'>
+                        <option value=''></option>
+                        <option value='1' $yesSelect >Yes</option>
+                        <option value='0' $noSelect >No</option>
+                    </select>";
+            }else{
+                echo "<input type='text' name='$column' id='$column' class='textBox corners' value='$value'>";
             }
+
+            echo"</td>";
             echo "</tr>";
         }
 
