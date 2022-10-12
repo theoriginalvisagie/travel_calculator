@@ -4,10 +4,11 @@
 
     $emp = new EmployeesClass();
 
-    // if(isset($_POST['uploadPic']) && $_POST['uploadPic']=="Upload"){
-    //     uploadImg();
-    //     $user->saveUserImage();
-    // }   
+    // echo '<pre>'.print_r($_POST,true).'</pre>';
+    if(isset($_POST['uploadPic']) && $_POST['uploadPic']=="Upload"){
+        uploadImg();
+        $emp->saveEmployeeImage($_POST['id']);
+    }
 
     echo $emp->init();
 ?>
