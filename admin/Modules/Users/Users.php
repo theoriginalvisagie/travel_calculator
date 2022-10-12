@@ -35,7 +35,7 @@
             }
 
             $width = "width: 100px;";
-            cardStart("","",false);
+            cardStart("","",false,"","96px");
             echo "<h1>Edit Profile</h1>";
             cardEnd();
 
