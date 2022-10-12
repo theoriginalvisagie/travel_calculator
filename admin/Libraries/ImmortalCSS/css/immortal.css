@@ -40,11 +40,24 @@ body,p{
 .button{
     border-radius: 50px;
     border: none;
-    width: 80px;
-    height: 32px;
+    width: 80px !important;
+    height: 32px !important;
     text-align: center;
     color: #2D2D2D;
     cursor: pointer;
+}
+
+.button-link{
+    border-radius: 50px;
+    border: none;
+    width: 80px !important;
+    height: 32px !important;
+    text-align: center;
+    color: #2D2D2D;
+    padding: 2px;
+    display: inline-block;
+    cursor: pointer; 
+    text-decoration: none;
 }
 /* =====[END]===== */
 
