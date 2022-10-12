@@ -34,9 +34,12 @@
             createTable($sql, $table, $name, $dontShow, $actions, $view=true);
         }
 
-        function getAddEditEntry($id,$table,$dontShow=""){
-            $dontShow = "id,userID";
-            $headings = getTableColumns($table, $dontShow);
+        function getAddEditEntry($id,$table,$dontShow="",$show=false){
+            if(empty($dontShow)){
+                $dontShow = "id,userID";
+            }
+            
+            $headings = getTableColumns($table, $dontShow,$show);
             $sql = "SELECT * FROM $table WHERE id='$id'";
             $results = exeSQL($sql);
 
@@ -46,11 +49,11 @@
             foreach($headings as $heading){
                 $column = $heading['Column'];
                 $type = $heading['Type'];
+                $js = "onchange=updateValue(this.value,\"$table\",\"$id\",\"$column\")";
                 
                 echo "<tr>";
                 echo "<td>".ucwords(str_replace("_"," ",$column))."</td>";
-
-                
+     
                 $value = $results[0][$column];
                 
                 echo "<td>";
@@ -67,7 +70,7 @@
                             <option value='0' $noSelect >No</option>
                         </select>";
                 }else{
-                    echo "<input type='text' name='$column' id='$column' class='textBox corners' value='$value'>";
+                    echo "<input type='text' name='$column' id='$column' class='textBox corners' value='$value' $js>";
                 }
 
                 echo"</td>";
@@ -158,6 +161,12 @@
             }
 
             echo "</ul>";
+
+            foreach($tabs as $tab=>$var){
+                if($_GET['subTab'] == $var){
+                    $this->getEmployeeInformation($id,$var);
+                }
+            }
         }
 
         function getEmployeeDetails($id){
@@ -166,6 +175,24 @@
             $result = exeSQL($sql);
                 
             return $result;
+        }
+
+        function getEmployeeInformation($id,$var){
+            if($var == "personal_info"){
+                $hidden = "first_name,middle_name,last_name,email,contact_number";
+                $show = true;
+            }else if($var == "transport_info"){
+                $hidden = "";
+                $show = true;
+            }else if($var == "account_info"){
+                $hidden = "";
+                $show = true;
+            }
+
+            cardStart("Details","#FFF");
+            echo "<div class='alert alert-success' id='saveDiv' style='display:none;'>Saved!</div>";
+            $this->getAddEditEntry($id,"employees",$hidden,$show);
+            cardEnd();
         }
 
         function saveEmployeeImage($id){
@@ -177,6 +204,18 @@
                 $sql = "UPDATE employees SET profile_pic = '$image' WHERE id='$id'";
             }
             exeSQL($sql);
+        }
+
+        function updateEmployeeDetails($value,$table,$id,$column){
+            $sql = "UPDATE $table SET $column = '$value' WHERE id='$id'";
+            
+            $response = exeSQL($sql);
+
+            if($response){
+                echo "true";
+            }else{
+                echo "false";
+            }
         }
 
         function getTransportTypes(){

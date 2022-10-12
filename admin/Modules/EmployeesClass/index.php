@@ -1,3 +1,4 @@
+<script src="<?php echo URLROOT?>/admin/Modules/EmployeesClass/script/js.js"></script>
 <?php
     require_once("includes.php");
     require_once("EmployeesClass.php");
