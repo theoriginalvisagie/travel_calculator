@@ -30,6 +30,11 @@
 
             if(!empty($profilePic)){
                 $userImg = URLROOT."/admin/".$profilePic;
+                if(fileExists($userImg)){
+                    $userImg = URLROOT."/admin/".$profilePic;
+                }else{
+                    $userImg = URLROOT."/admin/SYSTEMREC/Default_images/profile_defualt.jpg";
+                }
             }else{
                 $userImg = URLROOT."/admin/SYSTEMREC/Default_images/profile_defualt.jpg";
             }
