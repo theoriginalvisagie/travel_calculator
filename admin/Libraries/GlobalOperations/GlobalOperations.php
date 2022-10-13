@@ -44,4 +44,25 @@
 
         return $dir;
     }
+
+    function calculateBusinessDays($startDate,$endDate) {
+
+        if (strtotime($endDate) >= strtotime($startDate)){            
+            $holidays = array("2020-12-24","2020-12-25","2020-12-26");
+            $date = $startDate;
+            $days = 0;
+            
+            while ($date != $endDate) {
+                $date = date("Y-m-d", strtotime("+1 day", strtotime($date)));
+                $weekday = date("w", strtotime($date));
+                if ($weekday != 6 AND $weekday != 0 AND !in_array($date, $holidays)){
+                    $days++;  
+                } 
+            }
+            
+            return $days;
+        }else {
+            return "Please check the dates.";
+        }  
+    }
 ?>
