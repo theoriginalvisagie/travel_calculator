@@ -10,6 +10,7 @@
                 $name = " : ".getColumnValues("employees","first_name,last_name","id='{$_GET['employee']}'",true);
                 $name = str_replace(","," ",$name);
             }
+
             cardStart("Employees$name","#FFF",true,"2");
             if(isset($_GET['employee'])){
                 $this->showEmployeeDetails($_GET['employee']);
@@ -26,7 +27,11 @@
         }
 
         function displayEmployees(){
-            $sql = "SELECT * FROM employees";
+            $sql = "SELECT e.id,e.first_name,e.middle_name,e.last_name,e.email,e.contact_number, d.name as department, dt.name as defualt_transport_method,
+                    e.default_distance,e.workdays_per_week,e.start_allowance_from FROM employees e
+                    LEFT JOIN departments d ON d.id = e.department
+                    LEFT JOIN transport_types dt ON dt.id = e.defualt_transport_method";
+
             $table = "employees";
             $name = "employees_table";
             $dontShow = "id,userID,profile_pic";
@@ -69,12 +74,16 @@
                             <option value='1' $yesSelect >Yes</option>
                             <option value='0' $noSelect >No</option>
                         </select>";
+                }else if($type == "date"){
+                    echo "<input type='date' name='$column' id='$column' class='textBox corners' value='$value' $js>";
                 }else if($column == "defualt_transport_method"){
                     dropDown("transport_types","name",$column,$value,$js);
                 }else if($column == "department"){
                     dropDown("departments","name",$column,$value,$js);
                 }else if($column == "default_distance"){
                     echo "<input type='text' name='$column' id='$column' class='textBox corners' value='$value' $js> <em>(km)</em>";
+                }else if($column == "workdays_per_week"){
+                    echo "<input type='text' name='$column' id='$column' class='textBox corners' value='$value' $js> <em>(days)</em>";
                 }else{
                     echo "<input type='text' name='$column' id='$column' class='textBox corners' value='$value' $js>";
                 }
@@ -188,10 +197,10 @@
                 $hidden = "first_name,middle_name,last_name,email,contact_number";
                 $show = true;
             }else if($var == "transport_info"){
-                $hidden = "defualt_transport_method,default_distance";
+                $hidden = "defualt_transport_method,default_distance,start_allowance_from";
                 $show = true;
             }else if($var == "job_details"){
-                $hidden = "department";
+                $hidden = "workdays_per_week,department";
                 $show = true;
             }
 
