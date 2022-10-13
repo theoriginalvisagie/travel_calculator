@@ -304,10 +304,10 @@
         echo "</div></div>";
     }
 
-    function dropDown($table,$column,$name,$result){
+    function dropDown($table,$column,$name,$result,$js=''){
         $dd = exeSQL("SELECT * FROM $table");
         $selected = "";
-        echo "<select name='$name' id='$name'>";
+        echo "<select name='$name' id='$name' $js>";
         echo "<option></option>";
 
         foreach($dd as $key=>$value){
