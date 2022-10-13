@@ -303,4 +303,14 @@
     function cardEnd(){
         echo "</div></div>";
     }
+
+    function dropDown($table,$column,$name){
+        $dd = exeSQL("SELECT * FROM $table");
+        echo "<select name='$name' id='$name'>";
+        echo "<option></option>";
+        foreach($dd as $key=>$value){
+            echo "<option value='{$value['id']}'>{$value[$column]}</option>";
+        }
+        echo "</select>";
+    }
 ?>
