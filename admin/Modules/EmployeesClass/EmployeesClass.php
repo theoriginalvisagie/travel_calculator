@@ -70,9 +70,9 @@
                             <option value='0' $noSelect >No</option>
                         </select>";
                 }else if($column == "defualt_transport_method"){
-                    dropDown("transport_types","name",$column);
+                    dropDown("transport_types","name",$column,$value);
                 }else if($column == "department"){
-                    dropDown("departments","name",$column);
+                    dropDown("departments","name",$column,$value);
                 }else if($column == "default_distance"){
                     echo "<input type='text' name='$column' id='$column' class='textBox corners' value='$value' $js> <em>(km)</em>";
                 }else{
