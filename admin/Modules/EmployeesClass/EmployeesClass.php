@@ -70,9 +70,9 @@
                             <option value='0' $noSelect >No</option>
                         </select>";
                 }else if($column == "defualt_transport_method"){
-                    dropDown("transport_types","name",$column,$value);
+                    dropDown("transport_types","name",$column,$value,$js);
                 }else if($column == "department"){
-                    dropDown("departments","name",$column,$value);
+                    dropDown("departments","name",$column,$value,$js);
                 }else if($column == "default_distance"){
                     echo "<input type='text' name='$column' id='$column' class='textBox corners' value='$value' $js> <em>(km)</em>";
                 }else{
@@ -147,7 +147,7 @@
             $tabs = array(
                             "Personal Information"=>"personal_info",
                             "Tranport Information"=>"transport_info",
-                            "Account Access"=>"account_info"
+                            "Job Details"=>"job_details"
                         );
             if(!isset($_GET['subTab'])){
                 $_GET['subTab'] = "personal_info";
@@ -190,8 +190,8 @@
             }else if($var == "transport_info"){
                 $hidden = "defualt_transport_method,default_distance";
                 $show = true;
-            }else if($var == "account_info"){
-                $hidden = "";
+            }else if($var == "job_details"){
+                $hidden = "department";
                 $show = true;
             }
 
