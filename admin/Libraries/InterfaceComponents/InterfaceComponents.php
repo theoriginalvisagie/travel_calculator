@@ -274,7 +274,7 @@
         echo "</form>";
     }
 
-    function cardStart($name,$headerColor="",$displayHeader = true, $headingSize = "",$height=""){
+    function cardStart($name,$headerColor="",$displayHeader = true, $headingSize = "",$height="",$widht="",$overflow=""){
         if($headerColor == ""){
             $headerColor = '#00D1FF';
         }
@@ -291,7 +291,7 @@
             $headingEnd = "</h$headingSize>";
         }
 
-        echo "<div class='card m-3' style='height:$height'>";
+        echo "<div class='card m-3' style='height:$height;width:$widht; overflow:$overflow;'>";
        
         if($displayHeader){   
             echo"<div class='card-header' style='background-color:$headerColor'>
