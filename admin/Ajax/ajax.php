@@ -69,7 +69,9 @@
         $sql = "INSERT INTO {$_POST['table']}(";
         foreach($dataArr as $field=>$value){
             $columns .= "$field,";
-            $values .= "'".str_replace("%20"," ",$value)."',";
+            $dataValue = str_replace("%20"," ",$value);
+            $dataValue = str_replace("%40","@",$dataValue);
+            $values .= "'$dataValue',";
         }
         $columns = rtrim($columns,",");
         $columns .= ") VALUES (";
@@ -121,7 +123,9 @@
             if($field == "id"){
                 $id = $value;
             }else{
-                $sql .= $field ."='".str_replace("%20"," ",$value)."',";
+                $dataValue = str_replace("%20"," ",$value);
+                $dataValue = str_replace("%40","@",$dataValue);
+                $sql .= $field ."='$dataValue',";
             }
         }
 
