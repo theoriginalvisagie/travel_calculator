@@ -260,6 +260,8 @@
                         <option value='1' $yesSelect >Yes</option>
                         <option value='0' $noSelect >No</option>
                     </select>";
+            }else if($type == "date"){
+                echo "<input type='date' name='$column' id='$column' class='textBox corners' value='$value'>";
             }else{
                 echo "<input type='text' name='$column' id='$column' class='textBox corners' value='$value'>";
             }
