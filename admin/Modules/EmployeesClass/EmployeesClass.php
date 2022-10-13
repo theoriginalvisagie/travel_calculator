@@ -36,7 +36,7 @@
 
         function getAddEditEntry($id,$table,$dontShow="",$show=false){
             if(empty($dontShow)){
-                $dontShow = "id,userID";
+                $dontShow = "id,userID,profile_pic";
             }
             
             $headings = getTableColumns($table, $dontShow,$show);
@@ -69,6 +69,12 @@
                             <option value='1' $yesSelect >Yes</option>
                             <option value='0' $noSelect >No</option>
                         </select>";
+                }else if($column == "defualt_transport_method"){
+                    dropDown("transport_types","name",$column);
+                }else if($column == "department"){
+                    dropDown("departments","name",$column);
+                }else if($column == "default_distance"){
+                    echo "<input type='text' name='$column' id='$column' class='textBox corners' value='$value' $js> <em>(km)</em>";
                 }else{
                     echo "<input type='text' name='$column' id='$column' class='textBox corners' value='$value' $js>";
                 }
@@ -182,7 +188,7 @@
                 $hidden = "first_name,middle_name,last_name,email,contact_number";
                 $show = true;
             }else if($var == "transport_info"){
-                $hidden = "";
+                $hidden = "defualt_transport_method,default_distance";
                 $show = true;
             }else if($var == "account_info"){
                 $hidden = "";
