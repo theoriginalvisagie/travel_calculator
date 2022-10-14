@@ -57,19 +57,38 @@
             foreach($result as $key=>$value){                
                 echo "<td>";
 
-                cardStart("","","","","290px","290px");
-                echo $value['first_name']."<br>";
+                cardStart("","","","","290px","370px");
+                $userImg = $this->getProfilePhoto($value['profile_pic']);
+                echo "<div style='display:table;'>";
+                echo "<img class='circle' src='$userImg' style='height:55px; width:auto; display:inline-block;'>&nbsp";
+                echo "<h3 style='display:table-cell; vertical-align:middle'>{$value['first_name']} {$value['last_name']}</h3>";
+                echo "</div>";
                 $this->getCompensationDays($value);
                 cardEnd();
 
                 echo "</td>";
 
                 $count ++;
-                if($count == 5){
+                if($count == 4){
                     echo "</tr><tr>";
                 }  
             }
             echo "</tr>";
+        }
+
+        function getProfilePhoto($photo){
+            if(!empty($photo)){
+                $userImg = URLROOT."/admin/".$photo;
+                if(fileExists($photo)){
+                    $userImg = URLROOT."/admin/".$photo;
+                }else{
+                    $userImg = URLROOT."/admin/SYSTEMREC/Default_images/profile_defualt.jpg";
+                }
+            }else{
+                $userImg = URLROOT."/admin/SYSTEMREC/Default_images/profile_defualt.jpg";
+            }
+
+            return $userImg;
         }
 
         function getCompensationDays($data){
@@ -99,24 +118,7 @@
                 $nextMonth = 1;
                 $currentYear = $currentYear+1; 
             }
-
-            echo "Work Days: $workDaysPerWeek <br>";
-            echo "Transport: $transport | € $pricePK p/km<br>";
-            echo "Total Distance p/d: $totalDisatancePerDay km <br>";
-            
-            // echo "Bussiness Days: ".$bussinessDays."<br>";
-            // echo "Weeks: ".$weeks."<br>";
-            echo "Days traveld: ".$totalDaysTravelled."<br>";
-
-            // echo "Distance traveld: ".$totalDistance." km<br>";
-
-            // if($maxDistance > 0 && $maxDistance != "N/A"){
-            //     echo "Max Distance: ". $daysTraveld*$maxDistance." km<br>";
-            // }else{
-            //     echo "Max Distance: N/A"."<br>";
-            // }
-            
-
+           
             if($factor != "0.0" && $distanceOeWay >= 5){
                 if($distanceOeWay > 10){
                     $maxDoubleCompensation = $maxDistance-$minDistance;
@@ -127,24 +129,33 @@
                 }
                 $boubleCompensation = $distanceOeWay-$mod;
                 $totalFactorPerDay = ($boubleCompensation*$pricePK) + ($mod*$factor*$pricePK);
-                //$boubleCompensation (€ ".$boubleCompensation*$pricePK.") | $mod (€ ".$mod*$factor*$pricePK.")
                 $maxCompPerDay = $totalFactorPerDay*2;
-                echo "MaxCompPerDay: € $maxCompPerDay<br>";
-            }else{
-                echo "MaxCompPerDay: € $maxCompPerDay<br>";
             }
 
-            // if($daysTraveld*$maxDistance < $totalDistance){
-            //     echo "Compensation: € ".($pricePK*$daysTraveld*$maxDistance)." (€ ".$pricePK*$totalDistance.")<br>";
-            // }else{
-            //     echo "Compensation: € ".$pricePK*$totalDistance." <br>";
-            // }
-
-            echo "Compensation: € ".($maxCompPerDay*$totalDaysTravelled)." <br>";
-
-            echo "Payment Date: " . date("j, d-M-Y", strtotime("first monday $currentYear-$nextMonth"));
+            $transport = "$transport @ € $pricePK p/km";
+            $compensation =  number_format($maxCompPerDay*$totalDaysTravelled,2);
+            $paymentDate = date("d-M-Y", strtotime("first monday $currentYear-$nextMonth"));
+            $this->displayData($transport,$totalDaysTravelled,$totalDistance,$compensation,$paymentDate);
         }
 
+        function displayData($transport,$daysTraveld,$distanceTraveld,$compensation,$paymentDate){
+            $headings = array(
+                "Transport"=>$transport,
+                "Days to date"=>$daysTraveld." days",
+                "Distance to date"=>$distanceTraveld." km",
+                "Compensation to date"=>"€ ".$compensation,
+                "Next Payment date"=>$paymentDate
+            );
+
+            echo "<table class='table'>";
+            foreach($headings as $heading=>$data){
+                echo "<tr>";
+                echo "<td>$heading</td>";
+                echo "<td>$data</td>";
+                echo "</tr>";
+            }
+            echo "</table>";
+        }
         
     }
 ?>
