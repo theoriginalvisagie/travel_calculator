@@ -29,34 +29,56 @@
                     foreach($columns as $column){
                         $sql .= "{$column['Column']},";
                     
-                        if($column['Column'] == "max_km" || $column['Column'] == "min_km" || $column['Column'] == "factor"){
-                            if(!empty($data['exceptions'][0])){
-                                $value = $data['exceptions'][0][$column['Column']];
-                            }else{
-                                $value = "";
-                            }
-                            
-                        }else if($column['Column'] == "name"){
+                        if($column['Column'] == "name"){
                             $value = ucwords($data[$column['Column']]);
+                        }else if($column['Column'] == "last_synced"){
+                            $value = date("Y-m-d");
                         }else{
                             $value = $data[$column['Column']];
                         }
                         $values .= "'$value',";
                     }
 
-                    $sql = rtrim($sql,",").") VALUES(".rtrim($values,",",).")";
+                    $sql = rtrim($sql,",").") VALUES(".rtrim($values,",").")";
                     $result = exeSQL($sql);
+
                     $sql = "";
                     $values = "";
+                }   
+            }else if(!empty($result)){
+                foreach($result as $key=>$value){
+                    if($value['last_synced'] != date("Y-m-d")){
+                        $this->getLatestData($value);
+                    }else{
+                        echo "<script>
+                                eval('getSwalMessage()');
+                              </script>";
+                    }
                 }
-                
             }
+        }
+
+        function getLatestData($data){
+
         }
 
         function getAPIData(){
             $apiData = file_get_contents("https://api.staging.yeshugo.com/applicant/travel_types");
             $apiData = json_decode($apiData,true);
-
+            $cnt = 0;
+            foreach($apiData as $data){
+                if(empty($data['exceptions'])){
+                    unset($apiData[$cnt]['exceptions']);
+                }else{
+                    foreach($data['exceptions'] as $exception=>$arr){
+                        foreach($arr as $key=>$value){
+                            $apiData[$cnt][$key] = $value;
+                        }
+                    }
+                    unset($apiData[$cnt]['exceptions']);
+                }
+                $cnt ++;
+            }
             return $apiData;
         }
     }
