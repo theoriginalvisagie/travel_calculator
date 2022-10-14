@@ -11,7 +11,7 @@
                 $name = str_replace(","," ",$name);
             }
 
-            cardStart("Employees$name","#FFF",true,"2");
+            cardStart("Employees$name","#FFF",true,"2","","","auto");
             if(isset($_GET['employee'])){
                 $this->showEmployeeDetails($_GET['employee']);
             }else if(isset($_GET['subMenu'])){
@@ -28,13 +28,13 @@
 
         function displayEmployees(){
             $sql = "SELECT e.id,e.first_name,e.middle_name,e.last_name,e.email,e.contact_number, d.name as department, dt.name as defualt_transport_method,
-                    e.default_distance,e.workdays_per_week,e.start_allowance_from FROM employees e
+                    e.default_distance,e.workdays_per_week,e.start_allowance_from,e.travel_allowance FROM employees e
                     LEFT JOIN departments d ON d.id = e.department
                     LEFT JOIN transport_types dt ON dt.id = e.defualt_transport_method";
 
             $table = "employees";
             $name = "employees_table";
-            $dontShow = "id,userID,profile_pic";
+            $dontShow = "id,userID,profile_pic,travel_allowance";
             $actions = $this->getTableActions($table,true);
             createTable($sql, $table, $name, $dontShow, $actions, $view=true);
         }
@@ -64,6 +64,8 @@
                 echo "<td>";
 
                 if($type == "bit(1)"){
+                    $yesSelect = "";
+                    $noSelect = "";
                     if($value == 1){
                         $yesSelect = "selected";
                     }else if($value == 0){
@@ -197,7 +199,7 @@
                 $hidden = "first_name,middle_name,last_name,email,contact_number";
                 $show = true;
             }else if($var == "transport_info"){
-                $hidden = "defualt_transport_method,default_distance,start_allowance_from";
+                $hidden = "defualt_transport_method,default_distance,start_allowance_from,travel_allowance";
                 $show = true;
             }else if($var == "job_details"){
                 $hidden = "workdays_per_week,department";
@@ -234,6 +236,9 @@
         }
 
         function getTransportTypes(){
+            $api = new TravelApi();
+            $api->init();
+
             $sql = "SELECT * FROM transport_types";
             $table = "transport_types";
             $name = "transport_types_table";
