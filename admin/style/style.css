@@ -115,8 +115,17 @@ body{
   color: #FFF;
 }
 
-.circle {
+.circle{
   border-radius: 100% !important;
+  overflow: hidden;
+  width: 200px;
+  height: 200px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  /* position: absolute; */
+  top: 72px;
+}
+
+.square{
   overflow: hidden;
   width: 200px;
   height: 200px;
