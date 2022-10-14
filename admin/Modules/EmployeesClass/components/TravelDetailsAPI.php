@@ -48,7 +48,12 @@
             }else if(!empty($result)){
                 foreach($result as $key=>$value){
                     if($value['last_synced'] != date("Y-m-d")){
-                        $this->getLatestData($value);
+                        $upToDate = $this->getLatestData($value);
+                        if($upToDate){
+                            echo "<script>
+                                    eval('getSwalMessage()');
+                                  </script>";
+                        }
                     }else{
                         echo "<script>
                                 eval('getSwalMessage()');
@@ -59,7 +64,26 @@
         }
 
         function getLatestData($data){
-
+            $arr = array("name","base_compensation_per_km","min_km","max_km","factor");
+            $apiData = $this->getAPIData();
+            $uptoDate = false;
+            foreach($apiData as $key=>$value){
+                if($value['id'] == $data['id']){
+                    foreach($arr as $name){
+                        $value[$name] = ucwords($value[$name]);
+                        if($data[$name] != $value[$name]){                            
+                            $sql = "UPDATE transport_types SET $name = '{$value[$name]}', last_synced = '".date('Y-m-d')."' WHERE id='{$data['id']}'";
+                            $response = exeSQL($sql);
+                            $uptoDate = true; 
+                        }else{
+                            $sql = "UPDATE transport_types SET last_synced = '".date('Y-m-d')."' WHERE id='{$data['id']}'";
+                            $response = exeSQL($sql);
+                            $uptoDate = true; 
+                        }
+                    }
+                } 
+            }
+            return $uptoDate;
         }
 
         function getAPIData(){
@@ -69,6 +93,9 @@
             foreach($apiData as $data){
                 if(empty($data['exceptions'])){
                     unset($apiData[$cnt]['exceptions']);
+                    $apiData[$cnt]['min_km'] = "0.0";
+                    $apiData[$cnt]['max_km'] = "0.0";
+                    $apiData[$cnt]['factor'] = "0.0";
                 }else{
                     foreach($data['exceptions'] as $exception=>$arr){
                         foreach($arr as $key=>$value){

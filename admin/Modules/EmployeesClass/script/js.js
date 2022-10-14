@@ -16,3 +16,13 @@ function updateValue(value, table, id, column){
         }   
     });
 }
+
+function getSwalMessage(){
+    Swal.fire({
+        title: 'Up To Date',
+        text: 'The data is up to date!',
+        icon: 'success',
+        confirmButtonColor: '#00D1FF',
+        confirmButtonText: 'Okay'
+    })
+}
