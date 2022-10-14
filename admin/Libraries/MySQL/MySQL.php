@@ -108,6 +108,7 @@
      * @return array of column names and types.
      */
     function getTableColumns($table,$hidden="",$show=false){
+        $where = "";
         if($hidden != ""){
             $hidden = explode(",",$hidden);
 
