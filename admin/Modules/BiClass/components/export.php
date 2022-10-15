@@ -12,9 +12,9 @@
     }
 
     $headings = array('Name', 'Transport', 'Days to date', 'Distance to date', "Compensation to date","Next Payment date");
-
-    header('Content-Type: text/csv; charset=utf-8');  
-    header('Content-Disposition: attachment; filename=data.csv');  
+    $date = date("Y-m-d");
+    header("Content-Type: text/csv; charset=utf-8");  
+    header("Content-Disposition: attachment; filename=travel_allownce_$date.csv");  
     $output = fopen("php://output", "w");  
     fputcsv($output,$headings);  
     

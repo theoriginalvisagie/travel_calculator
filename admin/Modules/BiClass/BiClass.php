@@ -10,27 +10,26 @@
             $listClass = "";
             $gridClass = "";
             if(isset($_POST['listView'])){
-                // if($_SESSION['dataView'] == "listView"){
-                    $listClass = "blu";
-                // }
+                $listClass = "blu";
                 $_SESSION['dataView'] = "listView";                       
             }else if(isset($_POST['gridView'])){
-                // if($_SESSION['dataView'] == "gridView"){
-                    $gridClass = "blu"; 
-                // }
-                $_SESSION['dataView'] = "gridView"; 
-                            
+                $gridClass = "blu"; 
+                $_SESSION['dataView'] = "gridView";             
+            }else if($_SESSION['dataView'] == "listView"){
+                $listClass = "blu";
+            }else if($_SESSION['dataView'] == "gridView"){
+                $gridClass = "blu";
             }else{
                 $_SESSION['dataView'] = "gridView"; 
             }
 
             // $this->getTabs();
             echo "<div style='margin-left:15px;'>
-                    <form method='post'>
+                    <form method='post' style='display:inline-block;'>
                         <button type='submit' class='button $gridClass' name='gridView' id='gridView' ><i class='fa fa-th-large'></i> Grid</button>
                         <button type='submit' class='button $listClass' name='listView' id='listView' ><i class='fa fa-bars'></i> List</button>
                     </form>
-                    <form method='post' action='components/export.php' enctype='multipart/form-data'>
+                    <form method='post' action='components/export.php' enctype='multipart/form-data' style='display:inline-block;'>
                         <button id='exportTable' name='exportTable' id='exportTable' class='button go drop'>Export</button>&nbsp
                         <input type='hidden' name='db' id='id' value='employees'>
                     </form>
@@ -49,7 +48,7 @@
             }else{
                 $gridClass = "blu";
             }
-            // $this->getIndividualCompensation();
+
             cardEnd();
             
         }
