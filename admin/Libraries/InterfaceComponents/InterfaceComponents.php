@@ -2,7 +2,7 @@
     include_once("../config.php");
     require_once(LIB_DIR."/MySQL/MySQL.php");
 
-    function createTable($sql, $table, $name, $dontShow, $actions, $view=true){
+    function createTable($sql, $table, $name, $dontShow, $actions,$showAdd = true,$view=true){
         $total_records_per_page = 10;
         if(isset($_SESSION[$table]['page_no']) && $_SESSION[$table]['page_no']!=""){
             $page_no = $_SESSION[$table]['page_no'];
@@ -22,7 +22,10 @@
 
         echo "<div class='card-body'>";
 
-        echo "<button id='addEntry' name='addEntry' class='button go drop floatRight' onclick='openModal(\"\",\"$table\",\"Add\")' >Add Entry</button>&nbsp";
+        if($showAdd){
+            echo "<button id='addEntry' name='addEntry' class='button go drop floatRight' onclick='openModal(\"\",\"$table\",\"Add\")' >Add Entry</button>&nbsp";
+        }
+        
         echo "<button id='searchColumn' name='searchColumn' class='button blu-outline floatRight' onclick='openSearch(\"$table\")' style='margin-right:5px;'>Search</button>&nbsp";
         
         echo "<table class='table table-striped table-hover'>
@@ -33,7 +36,10 @@
                         $heading
                       </th>";
             }
-            echo "<th>Actions</th>";
+            if($actions != "None"){
+                echo "<th>Actions</th>";
+            }
+            
         echo "</thead>";
 
         echo "<form method='post'>";
@@ -68,6 +74,8 @@
 
             if($actions == ""){
                 echo getTableActions($result['id'],$table,$view);
+            }else if($actions == "None"){
+
             }else{
                 echo getObjectActions($table,$view,$result['id']);
             }
