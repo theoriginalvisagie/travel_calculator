@@ -71,6 +71,7 @@
             $columns .= "$field,";
             $dataValue = str_replace("%20"," ",$value);
             $dataValue = str_replace("%40","@",$dataValue);
+            $dataValue = str_replace("%2C",",",$dataValue);
             $values .= "'$dataValue',";
         }
         $columns = rtrim($columns,",");
@@ -125,6 +126,7 @@
             }else{
                 $dataValue = str_replace("%20"," ",$value);
                 $dataValue = str_replace("%40","@",$dataValue);
+                $dataValue = str_replace("%2C",",",$dataValue);
                 $sql .= $field ."='$dataValue',";
             }
         }
@@ -132,7 +134,7 @@
         $sql = rtrim($sql,",");
 
         $sql .= " WHERE id='{$_POST['id']}' ";
-        
+        // echo $sql;
         $result = exeSQL($sql);
         if($result){
             echo "true";
