@@ -28,13 +28,13 @@
 
         function displayEmployees(){
             $sql = "SELECT e.id,e.first_name,e.middle_name,e.last_name,e.email,e.contact_number, d.name as department, dt.name as defualt_transport_method,
-                    e.default_distance,e.workdays_per_week,e.start_allowance_from,e.travel_allowance FROM employees e
+                    e.default_distance,e.start_allowance_from,e.travel_allowance,e.workdays FROM employees e
                     LEFT JOIN departments d ON d.id = e.department
                     LEFT JOIN transport_types dt ON dt.id = e.defualt_transport_method";
 
             $table = "employees";
             $name = "employees_table";
-            $dontShow = "id,userID,profile_pic,travel_allowance";
+            $dontShow = "id,userID,profile_pic,travel_allowance,workdays_per_week";
             $actions = $this->getTableActions($table,true);
             createTable($sql, $table, $name, $dontShow, $actions, $view=true);
         }
@@ -86,6 +86,8 @@
                     echo "<input type='text' name='$column' id='$column' class='textBox corners' value='$value' $js> <em>(km)</em>";
                 }else if($column == "workdays_per_week"){
                     echo "<input type='text' name='$column' id='$column' class='textBox corners' value='$value' $js> <em>(days)</em>";
+                }else if($column == "workdays"){
+                    checkBox("workdays","name",$column,$value);
                 }else{
                     echo "<input type='text' name='$column' id='$column' class='textBox corners' value='$value' $js>";
                 }
@@ -202,7 +204,7 @@
                 $hidden = "defualt_transport_method,default_distance,start_allowance_from,travel_allowance";
                 $show = true;
             }else if($var == "job_details"){
-                $hidden = "workdays_per_week,department";
+                $hidden = "workdays,department";
                 $show = true;
             }
 
