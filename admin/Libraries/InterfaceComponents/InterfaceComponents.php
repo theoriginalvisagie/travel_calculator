@@ -314,7 +314,7 @@
 
         $dd = exeSQL("SELECT * FROM $table");
         $selected = "";
-        echo "<select name='$name' id='$name' $js>";
+        echo "<select name='$name' id='$name' $js class='textBox inner'>";
         echo "<option></option>";
 
         foreach($dd as $key=>$value){
