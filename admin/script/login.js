@@ -125,7 +125,8 @@ function createNewUser(){
         data: {action:'createNewUser', email:email, username:username, password:password},
         success: function(response) {            
             if(response == "true"){
-                alert("Welcome " +username);
+                alert("Welcome " +username + ", you will be redirected to login!");
+                window.location.href = "login.php";
             }else{
                 alert("Try Again");
             }
