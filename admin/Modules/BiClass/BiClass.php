@@ -5,8 +5,107 @@
         }
 
         function init(){
-            cardStart("","",false,"","","","auto");
+            if(isset($_POST['action'])){
+                if($_POST['action'] == "Approve"){
+                    $response = $this->updateDailyAllowances($_POST['action']);
+                }else if($_POST['action'] == "Deny"){
+                    $response = $this->updateDailyAllowances($_POST['action']);
+                }
+            }
 
+            if(isset($response)){
+                if($response){
+                    echo "<div class='alert alert-success'>Done</div>";
+                }
+            }
+
+            cardStart("","",false,"","","","auto");
+            $this->getTabs();
+            cardEnd();
+            
+        }
+
+        function getTabs(){
+            $active = "";
+            $link = "?";
+            $tabs = array(
+                            "Over View"=>"overview",
+                            "Daily Approval"=>"dailyApproval"
+                        );
+            if(!isset($_GET['tab'])){
+                $_GET['tab'] = "overview";
+            }
+            
+            echo "<ul class='nav nav-tabs'>";
+            foreach($tabs as $tab=>$var){
+                if($_GET['tab'] == $var){
+                    $active = "active";
+                }
+
+                echo "<li class='nav-item'>
+                        <a class='nav-link $active' href='$link&tab=$var'>$tab</a>
+                     </li>";
+
+                $active = "";
+            }
+
+            echo "</ul>";
+
+            foreach($tabs as $tab=>$var){
+                if($_GET['tab'] == $var){
+                    if($var == "dailyApproval"){
+                        $this->getSubTabs();
+                    }else if($var == "overview"){
+                        $this->getOverView();
+                    }
+                    // $this->getEmployeeInformation($id,$var);
+                }
+            }
+        }
+
+        function getSubTabs(){
+            $active = "";
+            $link = "?&tab=dailyApproval";
+            $tabs = array(
+                "Pending"=>"pending",
+                "Approved"=>"approved",
+                "Denied"=>"denied"
+            );
+
+            if(!isset($_GET['subTab'])){
+                $_GET['subTab'] = "pending";
+            }
+
+            echo "<ul class='nav nav-tabs' style='margin-top:15px;'>";foreach($tabs as $tab=>$var){
+                if($_GET['subTab'] == $var){
+                    $active = "active";
+                }
+
+                echo "<li class='nav-item'>
+                        <a class='nav-link $active' href='$link&subTab=$var'>$tab</a>
+                     </li>";
+
+                $active = "";
+            }
+
+            echo "</ul>";
+
+            foreach($tabs as $tab=>$var){
+                if($_GET['subTab'] == $var){
+                    if($var == "pending"){
+                        $this->getdailyApproval("Pending");
+                    }else if($var == "approved"){
+                        $this->getdailyApproval("Approve");
+                    }else if($var == "denied"){
+                        $this->getdailyApproval("Deny");
+                    }
+                }
+            }
+
+            
+        }
+
+        function getOverView(){
             $listClass = "";
             $gridClass = "";
             if(isset($_POST['listView'])){
@@ -23,8 +122,7 @@
                 $_SESSION['dataView'] = "gridView"; 
             }
 
-            // $this->getTabs();
-            echo "<div style='margin-left:15px;'>
+            echo "<div style='margin-left:15px; margin-top:20px;'>
                     <form method='post' style='display:inline-block;'>
                         <button type='submit' class='button $gridClass' name='gridView' id='gridView' ><i class='fa fa-th-large'></i> Grid</button>
                         <button type='submit' class='button $listClass' name='listView' id='listView' ><i class='fa fa-bars'></i> List</button>
@@ -48,45 +146,102 @@
             }else{
                 $gridClass = "blu";
             }
-
-            cardEnd();
-            
         }
 
-        function getTabs(){
-            $active = "";
-            $link = "?";
-            $tabs = array(
-                            "Over View"=>"overview",
-                            "Individual"=>"individual"
-                        );
-            if(!isset($_GET['tab'])){
-                $_GET['tab'] = "overview";
+        function getdailyApproval($status){
+            $response = false;
+            $headings = array("employee"=>"Name",
+                        "transport_type"=>"Transport",
+                        "date"=>"Date",
+                        "distance"=>"Distance",
+                        "daily_allowance"=>"Allowance",
+                        "status"=>"Status"
+                    );
+
+            $sql = "SELECT * FROM employees WHERE travel_allowance = '1'";
+            $results = exeSQL($sql);
+
+            foreach($results as $result){
+                $response = $this->insertDailyTravelAllowance($result);
+            }
+
+            if($response){
+                echo "<div class='alert alert-success'>Data Added, Please Apporve/Decline</div>";
             }
             
-            echo "<ul class='nav nav-tabs'>";
-            foreach($tabs as $tab=>$var){
-                if($_GET['tab'] == $var){
-                    $active = "active";
-                }
-
-                echo "<li class='nav-item'>
-                        <a class='nav-link $active' href='$link&tab=$var'>$tab</a>
-                     </li>";
-
-                $active = "";
+            echo "<table class='table table-striped'>";
+            echo "<thead>";
+            foreach($headings as $key=>$heading){
+                echo "<th>$heading</th>";
             }
+            echo "<th>Action</th>";
+            echo "</thead>";
 
-            echo "</ul>";
-
-            foreach($tabs as $tab=>$var){
-                if($_GET['tab'] == $var){
-                    if($var == "individual"){
-                        $this->getIndividualCompensation();
-                    }else if($var == "overview"){
-                        // $this->getOverView();
+            $currentDate = date("Y-m-d");
+            $sql = "SELECT * FROM daily_travel_allowance WHERE date = '$currentDate' AND status = '$status'";
+            $results = exeSQL($sql);
+            foreach($results as $result){
+                echo "<tr>";
+                foreach($headings as $key=>$heading){
+                    echo "<td>";
+                    if($key == "employee"){
+                        echo $result[$key];
+                        // echo getColumnValues("employees","first_name,last_name","id='{$result['id']}'",true);
+                    }else if($key == "transport_type"){
+                        echo getColumnValues("transport_types","name","id='{$result['transport_type']}'",true);
+                    }else if($key == "status"){
+                        $badge = "warning";
+                        if($result[$key] == "Approve"){
+                            $badge = "success";
+                        }else if($result[$key] == "Deny"){
+                            $badge = "danger";
+                        }
+                        echo "<span class='badge text-bg-$badge'>{$result[$key]}<span>";
+                    }else{
+                        echo $result[$key];
                     }
-                    // $this->getEmployeeInformation($id,$var);
+                    echo "</td>";
+                }
+                echo "<td>";
+                echo "<form method='post'>
+                        <input type='submit' class='button go-outline drop' name='action' id='action' value='Approve'>
+                        <input type='submit' class='button no-outline drop' name='action' id='action' value='Deny'>
+                        <input type='hidden' id='id' name='id' value='{$result['id']}'>
+                      </form>";
+                echo "</td>";
+                echo "</tr>";
+
+            }
+            echo "</table>";
+
+        }
+
+        function updateDailyAllowances($action){
+            $sql = "UPDATE daily_travel_allowance SET status = '$action' WHERE id = '{$_POST['id']}'";
+            $response = exeSQL($sql);
+
+            if($response ){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        function insertDailyTravelAllowance($data){
+            $currentDate = date("Y-m-d");
+            $sql = "SELECT * FROM daily_travel_allowance WHERE employee = '{$data['id']}' AND date = '$currentDate'";
+            $results = exeSQL($sql);
+
+            $dailyCompensation = $this->getCompensationDays($data);
+            $dailyCompensation = $dailyCompensation['maxCompPerDay']/2;
+
+            // echo '<pre>'.print_r($dailyCompensation,true).'</pre>';
+            if(empty($results)){
+                
+                $sql = "INSERT INTO daily_travel_allowance(employee,transport_type,date,distance,status,daily_allowance) VALUES('{$data['id']}','{$data['defualt_transport_method']}','$currentDate','{$data['default_distance']}','Pending','$dailyCompensation')";
+                $response = exeSQL($sql);
+                if($response){
+                    return true;
                 }
             }
         }
@@ -224,6 +379,7 @@
             $compensationData['totalDistance'] = $totalDistance;
             $compensationData['compensation'] = $compensation;
             $compensationData['paymentDate'] = $paymentDate;
+            $compensationData['maxCompPerDay'] = $maxCompPerDay;
 
             return $compensationData;
         }
