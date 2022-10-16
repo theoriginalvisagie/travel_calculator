@@ -29,11 +29,11 @@
             $active = "";
             $link = "?";
             $tabs = array(
-                            "Over View"=>"overview",
-                            "Daily Approval"=>"dailyApproval"
+                            "Daily Approval"=>"dailyApproval",
+                            "Overview"=>"overview"
                         );
             if(!isset($_GET['tab'])){
-                $_GET['tab'] = "overview";
+                $_GET['tab'] = "dailyApproval";
             }
             
             echo "<ul class='nav nav-tabs'>";
@@ -121,27 +121,43 @@
                 $_SESSION['dataView'] = "gridView"; 
             }
 
+            if(isset($_POST['startDate']) ){
+                $startDate = $_POST['startDate'];
+                $endDate = $_POST['endDate'];
+            }else{
+                $startDate = date('Y-m-01');
+                $endDate = date('Y-m-d');
+            }
+
             echo "<div style='margin-left:15px; margin-top:20px;'>
+                    <form method='post' style='margin-bottom:15px;'>
+                        <input type='date' name='startDate' class='textBox inner' id='startDate' value='$startDate'> TO 
+                        <input type='date' name='endDate' class='textBox inner' id='endDate' value='$endDate'>&nbsp
+                        <input type='submit' name='filterData' id='filterData' class='button blu drop' value='Filter'>
+                    </form>
                     <form method='post' style='display:inline-block;'>
                         <button type='submit' class='button $gridClass' name='gridView' id='gridView' ><i class='fa fa-th-large'></i> Grid</button>
                         <button type='submit' class='button $listClass' name='listView' id='listView' ><i class='fa fa-bars'></i> List</button>
                     </form>
+                    
                     <form method='post' action='components/export.php' enctype='multipart/form-data' style='display:inline-block;'>
                         <button id='exportTable' name='exportTable' id='exportTable' class='button go drop'>Export</button>&nbsp
                         <input type='hidden' name='db' id='id' value='employees'>
+                        <input type='hidden' name='startDate' id='startDate' value='$startDate'>
+                        <input type='hidden' name='endDate' id='endDate' value='$endDate'>
                     </form>
                   </div>";
                   
             if(isset($_SESSION['dataView'])){
                 if($_SESSION['dataView'] == "gridView"){
-                    $this->getIndividualCompensation();
+                    $this->getIndividualCompensation($startDate,$endDate);
                 }else if($_SESSION['dataView'] == "listView"){
-                    $this->getCompensation();
+                    $this->getCompensation($startDate,$endDate);
                 }
             }else if(isset($_POST['listView'])){
-                $this->getCompensation();
+                $this->getCompensation($startDate,$endDate);
             }else if(isset($_POST['gridView'])){
-                $this->getIndividualCompensation();
+                $this->getIndividualCompensation($startDate,$endDate);
             }else{
                 $gridClass = "blu";
             }
@@ -199,16 +215,17 @@
             echo "<th>Action</th>";
             echo "</thead>";
 
-            $sql = "SELECT * FROM daily_travel_allowance WHERE date <= '$endDate' AND date >= '$startDate' AND status = '$status'";
+            $sql = "SELECT dta.id,CONCAT(e.first_name,' ',e.last_name) as employee,dta.transport_type,dta.daily_allowance,dta.date,
+                    dta.distance, dta.to_from_work,dta.status FROM daily_travel_allowance dta
+                    LEFT JOIN employees e ON e.id=dta.employee
+                    WHERE date <= '$endDate' AND date >= '$startDate' AND status = '$status'";
+                    
             $results = exeSQL($sql);
             foreach($results as $result){
                 echo "<tr>";
                 foreach($headings as $key=>$heading){
                     echo "<td>";
-                    if($key == "employee"){
-                        echo $result[$key];
-                        // echo getColumnValues("employees","first_name,last_name","id='{$result['id']}'",true);
-                    }else if($key == "transport_type"){
+                     if($key == "transport_type"){
                         echo getColumnValues("transport_types","name","id='{$result['transport_type']}'",true);
                     }else if($key == "status"){
                         $badge = "warning";
@@ -282,8 +299,12 @@
                 }else if($column == "status"){
                     echo "<input type='text' class='textBox corners' value='Pending' disabled>";
                     echo "<input type='hidden' name='$column' id='$column' value='Pending'>";
-                }else if($column == "workdays"){
-                    checkBox("workdays","name",$column,$value);
+                }else if($column == "to_from_work"){
+                    echo "<select name='$column' id='$column' class='textBox corners'>
+                            <option value=''></option>
+                            <option value='To'>To</option>
+                            <option value='From'>From</option>
+                        </select>";
                 }else{
                     echo "<input type='text' name='$column' id='$column' class='textBox corners' value='$value'>";
                 }
@@ -338,7 +359,7 @@
             }
         }
 
-        function getCompensation(){
+        function getCompensation($startDate,$endDate){
             $headings = array("name"=>"Name",
                         "transport"=>"Transport",
                         "totalDaysTravelled"=>"Days to date",
@@ -355,7 +376,7 @@
 
             foreach($result as $result){        
                 // $data[$value['id']] = $this->getCompensationDays($value); 
-                $data[$result['id']] = $this->getCompensationData($result['id']); 
+                $data[$result['id']] = $this->getCompensationData($result['id'],$startDate,$endDate); 
             }
 
 
@@ -380,7 +401,7 @@
             echo "</table>";
         }   
 
-        function getIndividualCompensation(){
+        function getIndividualCompensation($startDate,$endDate){
             $sql = "SELECT * FROM employees";
             $result = exeSQL($sql);
             $count = 0;
@@ -397,7 +418,7 @@
                 echo "</div>";
 
                 // $data = $this->getCompensationDays($value);
-                $data = $this->getCompensationData($value['id']);
+                $data = $this->getCompensationData($value['id'],$startDate,$endDate);
 
                 $this->displayData($data);
 
@@ -428,11 +449,12 @@
             return $userImg;
         }
 
-        function getCompensationData($id){
+        function getCompensationData($id,$startDate,$endDate){
             $sql = "SELECT CONCAT(e.first_name,' ',e.last_name) as employee, dta.transport_type, SUM(dta.daily_allowance) as compensation, SUM(dta.distance) as totalDistance, 
                     COUNT(dta.id) as totalDaysTravelled FROM employees e
                     LEFT JOIN daily_travel_allowance dta ON dta.employee = e.id
-                    WHERE e.id='$id' AND status='Approve'";
+                    WHERE e.id='$id' AND status='Approve' AND date <= '$endDate' AND date >= '$startDate'";
+            // echo $sql;
             $results = exeSQL($sql);
 
             $currentMonth = date("m");
@@ -444,6 +466,7 @@
                 $nextMonth = 1;
                 $currentYear = $currentYear+1; 
             }
+
             $paymentDate = date("d-M-Y", strtotime("first monday $currentYear-$nextMonth"));
             $compensationData = array();
             foreach($results as $result){
