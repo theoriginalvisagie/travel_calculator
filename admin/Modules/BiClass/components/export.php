@@ -1,4 +1,6 @@
 <?php
+    ini_set('display_errors', 0);
+    ini_set('display_startup_errors', 0);
     require_once("../../../../config.php");   
     require_once(LIB_DIR."/MySQL/MySQL.php");
     require_once(LIB_DIR."/GlobalOperations/GlobalOperations.php");
@@ -6,9 +8,10 @@
 
     $bi = new BiClass();
     $sql = "SELECT * FROM employees";
-    $result = exeSQL($sql);
-    foreach($result as $key=>$value){        
-        $data[$value['id']] = $bi->getCompensationDays($value); 
+    $results = exeSQL($sql);
+
+    foreach($results as $result){        
+        $data[$value['id']] = $bi->getCompensationData($result['id']); 
     }
 
     $headings = array('Name', 'Transport', 'Days to date', 'Distance to date', "Compensation to date","Next Payment date");
