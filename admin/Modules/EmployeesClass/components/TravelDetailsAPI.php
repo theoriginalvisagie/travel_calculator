@@ -5,8 +5,10 @@
         }
 
         function init(){
+            $lastSynched = getColumnValues("transport_types","last_synced","id!='' ORDER BY last_synced ASC LIMIT 1",true);
             echo "<form method='post' style='margin-left:15px;'>
                     <input type='submit' name='checkData' id='checkData' value='Sync' class='button shadow maybe'>
+                    Last Synced: $lastSynched
                  </form>";
 
             if(isset($_POST['checkData']) && $_POST['checkData'] == "Sync"){
