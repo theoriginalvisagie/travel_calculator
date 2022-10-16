@@ -212,6 +212,7 @@
             foreach($headings as $key=>$heading){
                 echo "<th>$heading</th>";
             }
+
             if($status == "Pending"){
                 echo "<th>Action</th>";
             }
@@ -245,14 +246,14 @@
                 }
                 echo "<td>";
                 if($status == "Pending"){
+                    echo "<td>";
                     echo "<form method='post'>
                             <input type='submit' class='button go-outline drop' name='action' id='action' value='Approve'>
                             <input type='submit' class='button no-outline drop' name='action' id='action' value='Deny'>
                             <input type='hidden' id='id' name='id' value='{$result['id']}'>
                           </form>";
+                    echo "</td>";
                 }
-                
-                echo "</td>";
                 echo "</tr>";
 
             }
