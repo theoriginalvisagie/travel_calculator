@@ -153,8 +153,9 @@
             $headings = array("employee"=>"Name",
                         "transport_type"=>"Transport",
                         "date"=>"Date",
-                        "distance"=>"Distance",
-                        "daily_allowance"=>"Allowance",
+                        "distance"=>"Distance(km)",
+                        "daily_allowance"=>"Allowance(€)",
+                        "to_from_work"=>"To/From Work",
                         "status"=>"Status"
                     );
 
@@ -229,20 +230,32 @@
 
         function insertDailyTravelAllowance($data){
             $currentDate = date("Y-m-d");
+            $currentDay = date("D");
+            $empWorkDays = array();
+            // echo $currentDay;
             $sql = "SELECT * FROM daily_travel_allowance WHERE employee = '{$data['id']}' AND date = '$currentDate'";
             $results = exeSQL($sql);
 
             $dailyCompensation = $this->getCompensationDays($data);
             $dailyCompensation = $dailyCompensation['maxCompPerDay']/2;
 
-            // echo '<pre>'.print_r($dailyCompensation,true).'</pre>';
+            $workdays = array_filter(explode(",",$data['workdays']));
+            foreach($workdays as $workday){
+                $empWorkDays[] = getColumnValues("workdays","abreviation","id='$workday'",true);
+            }
+
             if(empty($results)){
-                
-                $sql = "INSERT INTO daily_travel_allowance(employee,transport_type,date,distance,status,daily_allowance) VALUES('{$data['id']}','{$data['defualt_transport_method']}','$currentDate','{$data['default_distance']}','Pending','$dailyCompensation')";
-                $response = exeSQL($sql);
-                if($response){
-                    return true;
-                }
+                if(in_array($currentDay,$empWorkDays)){
+                    $sql = "INSERT INTO daily_travel_allowance(employee,transport_type,date,distance,status,daily_allowance,to_from_work) VALUES('{$data['id']}','{$data['defualt_transport_method']}','$currentDate','{$data['default_distance']}','Pending','$dailyCompensation','To')";
+                    $response = exeSQL($sql);
+
+                    $sql = "INSERT INTO daily_travel_allowance(employee,transport_type,date,distance,status,daily_allowance,to_from_work) VALUES('{$data['id']}','{$data['defualt_transport_method']}','$currentDate','{$data['default_distance']}','Pending','$dailyCompensation','From')";
+                    $response = exeSQL($sql);
+
+                    if($response){
+                        return true;
+                    }
+                } 
             }
         }
 
@@ -256,8 +269,14 @@
                     );
             $sql = "SELECT * FROM employees";
             $result = exeSQL($sql);
-            foreach($result as $key=>$value){        
-                $data[$value['id']] = $this->getCompensationDays($value); 
+            // foreach($result as $key=>$value){        
+            //     $data[$value['id']] = $this->getCompensationDays($value); 
+                
+            // }
+
+            foreach($result as $result){        
+                // $data[$value['id']] = $this->getCompensationDays($value); 
+                $data[$result['id']] = $this->getCompensationData($result['id']); 
             }
 
 
@@ -298,7 +317,9 @@
                 echo "<h3 style='display:table-cell; vertical-align:middle'>{$value['first_name']} {$value['last_name']}</h3>";
                 echo "</div>";
 
-                $data = $this->getCompensationDays($value);
+                // $data = $this->getCompensationDays($value);
+                $data = $this->getCompensationData($value['id']);
+
                 $this->displayData($data);
 
                 cardEnd();
@@ -326,6 +347,36 @@
             }
 
             return $userImg;
+        }
+
+        function getCompensationData($id){
+            $sql = "SELECT CONCAT(e.first_name,' ',e.last_name) as employee, dta.transport_type, SUM(dta.daily_allowance) as compensation, SUM(dta.distance) as totalDistance, 
+                    COUNT(dta.id) as totalDaysTravelled FROM employees e
+                    LEFT JOIN daily_travel_allowance dta ON dta.employee = e.id
+                    WHERE e.id='$id'";
+            $results = exeSQL($sql);
+
+            $currentMonth = date("m");
+            $currentYear = date("Y");
+
+            if($currentMonth < 12){
+                $nextMonth = $currentMonth+1;
+            }else if($currentMonth == 12){
+                $nextMonth = 1;
+                $currentYear = $currentYear+1; 
+            }
+            $paymentDate = date("d-M-Y", strtotime("first monday $currentYear-$nextMonth"));
+            $compensationData = array();
+            foreach($results as $result){
+                $compensationData['name'] = $result['employee'];
+                $compensationData['transport'] = getColumnValues("transport_types","name","id='{$result['transport_type']}'",true);
+                $compensationData['totalDaysTravelled'] = $result['totalDaysTravelled']/2;
+                $compensationData['totalDistance'] = $result['totalDistance'];
+                $compensationData['paymentDate'] = $paymentDate;
+                $compensationData['compensation'] = $result['compensation'];
+            }
+
+            return $compensationData;
         }
 
         function getCompensationDays($data){
