@@ -32,7 +32,7 @@
     <script src="admin/Libraries/SweetAlert2/node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
      <!-- ========== -->
 
-    <title>Forgot Password</title>
+    <title>Forgot Password | Travel Calculator</title>
 </head>
 <body class="loginBody" style="overflow: hidden;">
     <div class="row" style="margin:0px; width:100%; height:100vh; padding:0px;">

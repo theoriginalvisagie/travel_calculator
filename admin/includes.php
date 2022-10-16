@@ -4,6 +4,4 @@
     require_once(LIB_DIR."/MySQL/MySQL.php");
     require_once(LIB_DIR."/InterfaceComponents/InterfaceComponents.php");
     require_once(LIB_DIR."/GlobalOperations/GlobalOperations.php");
-
-    // echo INC_DIR."/header.php";
 ?>

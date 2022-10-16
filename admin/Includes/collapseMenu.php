@@ -4,19 +4,7 @@
         $liStyle = "style='background-color:transparent; margin-left:15px; text-decoration:none;'";
         $aStyle = "style='text-decoration:none; color:#FFF !important;'";
     
-        if($name == "BiClass"){
-            $link = getLink("BiClass");
-            echo "<div class='collapse multi-collapse' id='multiCollapse_$name'>
-                    <div>
-                        <ul class='fa-ul'>
-                            <li $liStyle>
-                                $icon
-                                <a href='$link?' class='' $aStyle>Settings</a>
-                            </li>
-                        </ul>
-                    </div>
-                  </div>";
-        }else if($name == "EmployeesClass"){
+        if($name == "EmployeesClass"){
             $link = getLink("EmployeesClass");
             echo "<div class='collapse multi-collapse' id='multiCollapse_$name'>
             <div>

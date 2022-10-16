@@ -38,8 +38,8 @@
     <div class="themeContainer" style="margin:0px; padding:0px;">
         <div class="box mainToolbar">
             <div class="row" style="height:100%; width:100%;">
-                <div class="col-4">One</div>
-                <div class="col-4">Two</div>
+                <div class="col-4"></div>
+                <div class="col-4"></div>
                 <div class="col-4" style="float:right; display: flex; align-items:center; justify-content: flex-end;">
                     <span class="userInfo">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropDownMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -56,16 +56,9 @@
                             </li>
                         </ul>
                     </span>
-                    <span class="userInfo" >
-                        <i class="fa-solid fa-bell"></i>
-                    </span>
-                    <span class="userInfo" >
-                       <a href="<?php echo URLROOT.'/admin/Modules/SysSettings/View'?>" ><i class="fa-solid fa-gear linkColor"></a></i>
-                    </span>
                 </div>
             </div>
         </div>
-        <!-- <div class="box topToolBar"></div> -->
         <div class="box sideNav"> 
             <div id="logoDiv">
                 <?php echo getLogo();?>

@@ -26,7 +26,6 @@
      define("APPVERSION", "1.0.0");
 
      function getLogo(){
-          // return URLROOT."/admin/AppImages/logo.png";
           echo "<h1 style='margin-top: 0.8rem;'><a id='logoFont' href='".URLROOT."/admin/home'>T Calc</a></h1>";
      }
 ?>
