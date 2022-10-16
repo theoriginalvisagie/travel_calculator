@@ -66,6 +66,7 @@ function saveEntry(table,id,action=""){
             url: '/Travel_Calculator/admin/Ajax/ajax.php', 
             data: {action:'updateEntry', table:table, formData:formData, id:id},
             success: function(response) {
+                console.log(response);
                 if(response == "true"){
                     Swal.fire({
                         title: 'Updated!',
@@ -136,5 +137,19 @@ function getnextTablePage(pageNo,table){
             location.reload();
         }   
     });
+}
+
+function addRemoveValueCheckBox(value,table){
+    var inputs = document.querySelectorAll(".checkBoxClass_"+table);  
+    checkboxValues = "";
+     
+    for (var i = 0; i < inputs.length; i++) {   
+        if(inputs[i].checked == true){
+            checkboxValues += ","+inputs[i].value+",";
+        }
+          
+    }  
+    console.log(checkboxValues);
+    document.getElementById("checkBoxList_"+table).value = checkboxValues;
 }
 

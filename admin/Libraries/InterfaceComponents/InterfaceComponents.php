@@ -25,9 +25,7 @@
         if($showAdd){
             echo "<button id='addEntry' name='addEntry' class='button go drop floatRight' onclick='openModal(\"\",\"$table\",\"Add\")' >Add Entry</button>&nbsp";
         }
-        
-        echo "<button id='searchColumn' name='searchColumn' class='button blu-outline floatRight' onclick='openSearch(\"$table\")' style='margin-right:5px;'>Search</button>&nbsp";
-        
+
         echo "<table class='table table-striped table-hover'>
                 <thead>";
             foreach($headings as $column=>$data){
@@ -41,14 +39,6 @@
             }
             
         echo "</thead>";
-
-        echo "<form method='post'>";
-        echo "<tr style='display:none;' id='tableSearch_$table' name='tableSearch_$table'>";
-        foreach($headings as $column=>$data){
-            echo "<td><input type='text' class='textBox inner lightBg' name='{$data['Column']}' id='{$data['Column']}' placeholder='search...'></td>";
-        }
-        echo "</tr>";
-        echo "</form>";
 
         $sql .= " LIMIT $offset, $total_records_per_page ";
         $results = exeSQL($sql);
@@ -329,5 +319,22 @@
         }
 
         echo "</select>";
+    }
+
+    function checkBox($table,$column,$name,$value){
+        $values = array_filter(explode(",",$value));
+        $checked = "";
+        $checkbox = exeSQL("SELECT * FROM $table");
+        foreach($checkbox as $key=>$value){
+            if(in_array($value['id'],$values)){
+                $checked = "checked";
+            }
+            echo "<input type='checkbox' class='checkBoxClass_$table' value='{$value['id']}' $checked onchange='addRemoveValueCheckBox(this.value,\"$table\")'>
+                    <label for='vehicle1'>$value[$column]</label><br>";
+
+            $checked = "";
+        }
+
+        echo "<input type='hidden' name='$name' id='checkBoxList_$table' value='' >";
     }
 ?>
