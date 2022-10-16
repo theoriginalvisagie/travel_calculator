@@ -77,10 +77,13 @@
         getTablePagnation($table,$total_records_per_page,$offset,$page_no);
         echo "</div></div>";//Card Divs
         echo "</div>";
+        createModal($table);
+    }
 
+    function createModal($table){
         echo "<div class='modal hide fade' id='exampleModal' tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true'>
                 <div class='modal-dialog modal-dialog-centered modal-dialog-scrollable'>
-                    <div class='modal-content'>
+                    <div class='modal-content' style='width:700px;'>
                         <div class='modal-header'>
                             <h5 class='modal-title' id='modalHeader'>Modal title</h5>
                             <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close' onclick='closeModal(\"$table\")'></button>
@@ -305,6 +308,10 @@
     }
 
     function dropDown($table,$column,$name,$result,$js=''){
+        if(strpos($column,",",0) > 0){
+            $columns = explode(",",$column);
+        }
+
         $dd = exeSQL("SELECT * FROM $table");
         $selected = "";
         echo "<select name='$name' id='$name' $js>";
@@ -314,7 +321,18 @@
             if($result == $value['id']){
                 $selected = "selected";
             }
-            echo "<option value='{$value['id']}' $selected>{$value[$column]}</option>";
+
+            if(!empty($columns)){
+                echo "<option value='{$value['id']}' $selected>";
+                foreach($columns as $key){
+                    echo $value[$key]." ";
+                }
+                echo "</option>";
+                
+            }else{
+                echo "<option value='{$value['id']}' $selected>{$value[$column]}</option>";
+            }
+           
             $selected = "";
         }
 
