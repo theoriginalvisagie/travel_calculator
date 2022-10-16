@@ -58,7 +58,6 @@
                     }else if($var == "overview"){
                         $this->getOverView();
                     }
-                    // $this->getEmployeeInformation($id,$var);
                 }
             }
         }
@@ -169,6 +168,28 @@
             if($response){
                 echo "<div class='alert alert-success'>Data Added, Please Apporve/Decline</div>";
             }
+
+            if(isset($_POST['startDate']) ){
+                $startDate = $_POST['startDate'];
+                $endDate = $_POST['endDate'];
+            }else{
+                $startDate = date('Y-m-d');
+                $endDate = date('Y-m-d');
+            }
+
+            echo "<div style='margin-top:15px;'>";
+            echo "<form method='post' style='display:inline-block;'>";
+            echo "<input type='date' name='startDate' class='textBox inner' id='startDate' value='$startDate'> TO ";
+            echo "<input type='date' name='endDate' class='textBox inner' id='endDate' value='$endDate'>&nbsp";
+            echo "<input type='submit' name='filterData' id='filterData' class='button blu drop' value='Filter'>";
+            echo "</form>";
+
+            if($status == "Pending"){
+                echo "<button id='addEntry' name='addEntry' class='button go drop floatRight' onclick='openModal(\"\",\"daily_travel_allowance\",\"Add\")' >Add Entry</button>&nbsp";
+                createModal("daily_travel_allowance");
+            }
+            echo "</div>";
+
             
             echo "<table class='table table-striped'>";
             echo "<thead>";
@@ -178,8 +199,7 @@
             echo "<th>Action</th>";
             echo "</thead>";
 
-            $currentDate = date("Y-m-d");
-            $sql = "SELECT * FROM daily_travel_allowance WHERE date = '$currentDate' AND status = '$status'";
+            $sql = "SELECT * FROM daily_travel_allowance WHERE date <= '$endDate' AND date >= '$startDate' AND status = '$status'";
             $results = exeSQL($sql);
             foreach($results as $result){
                 echo "<tr>";
@@ -217,6 +237,65 @@
 
         }
 
+        function getAddEditEntry($id,$table,$dontShow="",$show=false){
+            if(empty($dontShow)){
+                $dontShow = "id";
+            }
+            
+            $headings = getTableColumns($table, $dontShow,$show);
+            $sql = "SELECT * FROM $table WHERE id='$id'";
+            $results = exeSQL($sql);
+
+            echo "<form id='editEntryForm'>";
+            echo "<table class='table table-striped'>";
+                
+            foreach($headings as $heading){
+                $column = $heading['Column'];
+                $type = $heading['Type'];
+                
+                echo "<tr>";
+                echo "<td>".ucwords(str_replace("_"," ",$column))."</td>";
+     
+                $value = $results[0][$column];
+                
+                echo "<td>";
+
+                if($type == "bit(1)"){
+                    $yesSelect = "";
+                    $noSelect = "";
+                    if($value == 1){
+                        $yesSelect = "selected";
+                    }else if($value == 0){
+                        $noSelect = "selected";
+                    }
+                    echo "<select name='$column' id='$column' class='textBox corners'>
+                            <option value=''></option>
+                            <option value='1' $yesSelect >Yes</option>
+                            <option value='0' $noSelect >No</option>
+                        </select>";
+                }else if($type == "date"){
+                    echo "<input type='date' name='$column' id='$column' class='textBox corners' value='$value'>";
+                }else if($column == "employee"){
+                    dropDown("employees","first_name,last_name",$column,$value);
+                }else if($column == "transport_type"){
+                    dropDown("transport_types","name",$column,$value);
+                }else if($column == "status"){
+                    echo "<input type='text' class='textBox corners' value='Pending' disabled>";
+                    echo "<input type='hidden' name='$column' id='$column' value='Pending'>";
+                }else if($column == "workdays"){
+                    checkBox("workdays","name",$column,$value);
+                }else{
+                    echo "<input type='text' name='$column' id='$column' class='textBox corners' value='$value'>";
+                }
+
+                echo"</td>";
+                echo "</tr>";
+            }
+
+            echo "</table>";
+            echo "</form>";
+        }
+
         function updateDailyAllowances($action){
             $sql = "UPDATE daily_travel_allowance SET status = '$action' WHERE id = '{$_POST['id']}'";
             $response = exeSQL($sql);
@@ -232,7 +311,7 @@
             $currentDate = date("Y-m-d");
             $currentDay = date("D");
             $empWorkDays = array();
-            // echo $currentDay;
+
             $sql = "SELECT * FROM daily_travel_allowance WHERE employee = '{$data['id']}' AND date = '$currentDate'";
             $results = exeSQL($sql);
 
@@ -353,7 +432,7 @@
             $sql = "SELECT CONCAT(e.first_name,' ',e.last_name) as employee, dta.transport_type, SUM(dta.daily_allowance) as compensation, SUM(dta.distance) as totalDistance, 
                     COUNT(dta.id) as totalDaysTravelled FROM employees e
                     LEFT JOIN daily_travel_allowance dta ON dta.employee = e.id
-                    WHERE e.id='$id'";
+                    WHERE e.id='$id' AND status='Approve'";
             $results = exeSQL($sql);
 
             $currentMonth = date("m");
