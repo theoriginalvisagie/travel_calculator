@@ -11,7 +11,7 @@
     $results = exeSQL($sql);
 
     foreach($results as $result){        
-        $data[$value['id']] = $bi->getCompensationData($result['id']); 
+        $data[$value['id']] = $bi->getCompensationData($result['id'],$_POST['startDate'],$_POST['startDate']); 
     }
 
     $headings = array('Name', 'Transport', 'Days to date', 'Distance to date', "Compensation to date","Next Payment date");
