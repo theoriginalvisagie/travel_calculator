@@ -28,9 +28,11 @@
 
         function displayEmployees(){
             $sql = "SELECT e.id,e.first_name,e.middle_name,e.last_name,e.email,e.contact_number, d.name as department, dt.name as defualt_transport_method,
-                    e.default_distance,e.start_allowance_from,e.travel_allowance,e.workdays FROM employees e
+                    e.default_distance,e.start_allowance_from,e.travel_allowance,GROUP_CONCAT(w.abreviation) as workdays FROM employees e
                     LEFT JOIN departments d ON d.id = e.department
-                    LEFT JOIN transport_types dt ON dt.id = e.defualt_transport_method";
+                    LEFT JOIN transport_types dt ON dt.id = e.defualt_transport_method
+                    LEFT JOIN workdays w ON e.workdays LIKE CONCAT('%,',w.id,',%')
+                    GROUP BY e.id";
 
             $table = "employees";
             $name = "employees_table";
