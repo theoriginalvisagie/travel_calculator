@@ -34,7 +34,7 @@
                 if(file_exists($target_file)){
                     echo "<div class='alert alert-danger'>File ".basename($key["name"])." Exists, please choose a different file. </div>";
                 }else if (move_uploaded_file($key["tmp_name"], $target_file)) {
-                    echo "success";
+                    echo "<div class='alert alert-success'>Picture Uploaded!</div>";
                 }
             }
         }
