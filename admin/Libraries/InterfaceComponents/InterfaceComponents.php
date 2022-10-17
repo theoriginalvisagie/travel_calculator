@@ -410,7 +410,6 @@
      * @param string $name name of from element
      * @param string $value Data already in selected $column record
      */
-
     function checkBox($table,$column,$name,$value){
         $values = array_filter(explode(",",$value));
         $checked = "";
