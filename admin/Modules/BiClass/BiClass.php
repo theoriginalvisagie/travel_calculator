@@ -421,7 +421,7 @@
                 cardStart("","","","","290px","370px");
                 $userImg = $this->getProfilePhoto($value['profile_pic']);
                 echo "<div style='display:table;'>";
-                echo "<img class='circle' src='$userImg' style='height:55px; width:auto; display:inline-block;'>&nbsp";
+                echo "<img class='circle' src='$userImg' style='height:55px; width:55px; display:inline-block;'>&nbsp";
                 echo "<h3 style='display:table-cell; vertical-align:middle'>{$value['first_name']} {$value['last_name']}</h3>";
                 echo "</div>";
 
