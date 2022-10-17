@@ -90,6 +90,8 @@
                     echo "<input type='text' name='$column' id='$column' class='textBox corners' value='$value' $js> <em>(days)</em>";
                 }else if($column == "workdays"){
                     checkBox("workdays","name",$column,$value);
+                }else if($column == "base_compensation_per_km"){
+                    echo "<input type='text' name='$column' id='$column' class='textBox corners' value='$value' $js> <em>(€)</em>";
                 }else{
                     echo "<input type='text' name='$column' id='$column' class='textBox corners' value='$value' $js>";
                 }
