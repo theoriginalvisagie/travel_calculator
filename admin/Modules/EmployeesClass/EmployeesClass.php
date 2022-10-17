@@ -106,7 +106,7 @@
             $link = "?employee=$id";
             $s = "<td>";
     
-            if($view){
+            if($table == "employees"){
                 $s .= "<a href='$link' class='button-link blu drop'>View</a>&nbsp";
             }
                
