@@ -2,6 +2,16 @@
     include_once("../config.php");
     require_once(LIB_DIR."/MySQL/MySQL.php");
 
+    /**
+     * Creates an HTML table.
+     * @param string $sql String that contains SQL statment to get data for table.
+     * @param string $table Table that data needs to be pulled in from.
+     * @param string $name Name given to table.
+     * @param string $dontShow Columns to not display from selected table.
+     * @param method $actions Edit/Remove/View of individual rows in HTML table. Can be method in class or defaults to getTableActions().
+     * @param boolean $showAdd Shows add button to add record to table if set to true, else hides if set to false.
+     * @param boolean $view Displays view action of true.
+     */
     function createTable($sql, $table, $name, $dontShow, $actions,$showAdd = true,$view=true){
         $total_records_per_page = 10;
         if(isset($_SESSION[$table]['page_no']) && $_SESSION[$table]['page_no']!=""){
@@ -80,6 +90,10 @@
         createModal($table);
     }
 
+    /**
+     * Creates modal popup
+     * @param string $table Table columns need to be pulled in to display in modal
+     */
     function createModal($table){
         echo "<div class='modal hide fade' id='exampleModal' tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true'>
                 <div class='modal-dialog modal-dialog-centered modal-dialog-scrollable'>
@@ -100,6 +114,12 @@
             </div>";
     }
 
+    /**
+     * Displays Edit/View/Remove etc within class called from
+     * @param string $table Table which records need to be altered
+     * @param boolean $view Displays view action if true
+     * @param string $id Unique ID of individual record returned from DB
+     */
     function getObjectActions($table,$view,$id){
         
         $url = str_replace(URLROOT,"",$_SERVER['REQUEST_URI']);
@@ -116,6 +136,12 @@
         }
     }
 
+    /**
+     * Displays Edit/View/Remove
+     * @param string $id Unique ID of individual record returned from DB
+     * @param string $table Table which records need to be altered
+     * @param boolean $view Displays view action if true
+     */
     function getTableActions($id,$table,$view=true){
         echo "<td>";
 
@@ -128,7 +154,13 @@
              </td>";
     }
 
-    function getTablePagnation($table,$total_records_per_page,$offset,$page_no){
+    /**
+     * Builds Table pagnation
+     * @param string $table Table that data get's fetched from
+     * @param string $total_records_per_page NUmber of records displayed per page
+     * @param string $page_no Current page number of pagnation
+     */
+    function getTablePagnation($table,$total_records_per_page,$page_no){
         $style="style='background-color:#00D1FF; color:black;'";
         $previous_page = $page_no - 1;
         $next_page = $page_no + 1;
@@ -212,6 +244,12 @@
         echo"</ul></nav>";
     }
 
+    /**
+     * Content to be dislplayed within a modal
+     * @param string $id Unique Identifier if record is being Edited or removed
+     * @param string $table Table which columns need to be displayed 
+     * @param string [optional] $dontShow Columns to be hidden
+     */
     function getModalContent($id,$table,$dontShow=""){
         $headings = getTableColumns($table, $dontShow);
         $sql = "SELECT * FROM $table WHERE id='$id'";
@@ -229,6 +267,12 @@
         echo "</table>";
     }
 
+    /**
+     * Content to be dislplayed within a modal
+     * @param string $id Unique Identifier if record is being Edited or removed
+     * @param string $table Table which columns need to be displayed 
+     * @param string [optional] $dontShow Columns to be hidden
+     */
     function getAddEditEntry($id,$table,$dontShow=""){
         $dontShow = "id,userID";
         $headings = getTableColumns($table, $dontShow);
@@ -275,6 +319,15 @@
         echo "</form>";
     }
 
+    /**
+     * @param string $name
+     * @param string [optional] $headerColor Color of card header
+     * @param string [optional] $displayHeader Displays card header if true
+     * @param string [optional] $headingSize H tag size of $name
+     * @param string [optional] $height height of card
+     * @param string [optional] $widht width of card
+     * @param string [optional] $overflow scrollable or not
+     */
     function cardStart($name,$headerColor="",$displayHeader = true, $headingSize = "",$height="",$widht="",$overflow=""){
         if($headerColor == ""){
             $headerColor = '#00D1FF';
@@ -303,10 +356,21 @@
         echo "<div class='card-body'>";
     }
 
+    /**
+     * CLosing div of cardStart()
+     */
     function cardEnd(){
         echo "</div></div>";
     }
 
+    /**
+     * Builds drop down from selected bale
+     * @param string $table Table from which data needs to be displayed in drop down
+     * @param string $column Column from $table whihch need to be displayed, can be comma separated to display multiple columns
+     * @param string $name name of from element
+     * @param string $result Data already in selected $column record
+     * @param string [optional] $js JavaScript to be executed on change
+     */
     function dropDown($table,$column,$name,$result,$js=''){
         if(strpos($column,",",0) > 0){
             $columns = explode(",",$column);
@@ -338,6 +402,14 @@
 
         echo "</select>";
     }
+
+    /**
+     * Builds checkboxes from selected bale
+     * @param string $table Table from which data needs to be displayed in drop down
+     * @param string $column Column from $table whihch need to be displayed, can be comma separated to display multiple columns
+     * @param string $name name of from element
+     * @param string $value Data already in selected $column record
+     */
 
     function checkBox($table,$column,$name,$value){
         $values = array_filter(explode(",",$value));

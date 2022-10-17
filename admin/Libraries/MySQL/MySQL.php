@@ -5,6 +5,7 @@
      * @param string $sql SQL statment to execute.
      * @return array if SQL stament has data.
      * @return boolean if SQL statement doesn't return data
+     * @return boolean if SQL statement is INSERT OR UPDATE
      */
     function dbConnect($sql){
         $conn = new mysqli(DB_HOST,DB_USER,DB_PASS,DB_NAME);
@@ -43,24 +44,6 @@
     function exeSQL($sql){
         return dbConnect($sql);
     }
-
-    // function getArrayDB($results){
-    //     // $arrayobject = new ArrayObject($results);
-    //     // $iterator = $arrayobject->getIterator();
-    //     // if($iterator->valid()){
-    //     //     $result = $iterator->current();
-    //     //     $iterator->next();
-    //     //     return $result;
-    //     // }else{
-    //     //     return null;
-    //     // }
-    //     // foreach($results as $result=>$data){
-    //     //     return $data;     
-    //     //     // echo "<pre>".print_r($result,true)."</pre>";       
-    //     // }
-    //     // echo "<pre>".print_r($arrayobject,true)."</pre>";   
-    //     // return $arrayobject;
-    // }
 
     /**
      * Save new record to table
@@ -141,7 +124,7 @@
      * @param string $table table it needs to get data from.
      * @param string $columns that data needs to come from.
      * @param string $where WHERE statement that needs to be executed.
-     * @param boolean [optional] if true returns a string if false returns an array.
+     * @param boolean $concat return data as array if false and string(comma separated) if true.
      * @return string returns array or string.
      */
     function getColumnValues($table,$columns,$where,$concat=false){

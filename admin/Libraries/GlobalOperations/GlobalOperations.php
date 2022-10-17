@@ -1,4 +1,8 @@
 <?php
+
+    /**
+     * Created GUID for each session of each user
+     */
     function createGUID()
     {
         if (function_exists('com_create_guid')){
@@ -19,6 +23,9 @@
         }
     }
 
+    /**
+     * Uploads image to SYSTEMREC 
+     */
     function uploadImg(){
         $target_dir = ADMIN_DIR."/SYSTEMREC/{$_POST['dir']}/";
         foreach($_FILES as $key){
@@ -33,6 +40,11 @@
         }
     }
 
+    /**
+     * Check to see if file exists
+     * @param string $file directory and file name to check against
+     * @return boolean true or false
+     */
     function fileExists($file){
         $dir = APPROOT."/admin/".$file;
 
@@ -45,6 +57,12 @@
         return $dir;
     }
 
+    /**
+     * Calculated bussiness days between two dates
+     * @param string ['YYYY-MM-DD'] $startDate start date to calculate from
+     * @param string ['YYYY-MM-DD'] $endDate edn date to calculate to
+     * @return var Number of days between the dates
+     */
     function calculateBusinessDays($startDate,$endDate) {
 
         if (strtotime($endDate) >= strtotime($startDate)){            
