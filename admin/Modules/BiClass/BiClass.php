@@ -395,7 +395,13 @@
             echo "<table class='table table-striped'>";
             echo "<thead>";
             foreach($headings as $key=>$heading){
-                echo "<th>$heading</th>";
+                echo "<td>";
+                if($key == "compensation"){
+                    echo number_format($value[$key],2);
+                }else{
+                    echo $value[$key];
+                }
+                echo"</td>";
             }
             echo "</thead>";
 
