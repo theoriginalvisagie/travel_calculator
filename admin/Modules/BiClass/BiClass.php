@@ -174,7 +174,8 @@
                         "status"=>"Status"
                     );
 
-            $sql = "SELECT * FROM employees WHERE travel_allowance = '1'";
+            $currentDate = date("Y-m-d");
+            $sql = "SELECT * FROM employees WHERE travel_allowance = '1' AND start_allowance_from >= '$currentDate'";
             $results = exeSQL($sql);
 
             foreach($results as $result){
@@ -498,7 +499,7 @@
             $distanceOeWay = $data['default_distance'];
             $totalDisatancePerDay = $distanceOeWay*2;
 
-            $bussinessDays =  calculateBusinessDays($firstOfMonth,date("Y-m-d"));
+            $bussinessDays = calculateBusinessDays($firstOfMonth,date("Y-m-d"));
             $weeks = $bussinessDays/5;
             $daysTraveld = $weeks*$workDaysPerWeek;
             $totalDaysTravelled = ceil($daysTraveld);
