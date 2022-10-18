@@ -175,7 +175,7 @@
                     );
 
             $currentDate = date("Y-m-d");
-            $sql = "SELECT * FROM employees WHERE travel_allowance = '1' AND start_allowance_from >= '$currentDate'";
+            $sql = "SELECT * FROM employees WHERE travel_allowance = '1' AND start_allowance_from != '0000-00-00' AND start_allowance_from <= '$currentDate' ";
             $results = exeSQL($sql);
 
             foreach($results as $result){
